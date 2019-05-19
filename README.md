@@ -2,6 +2,7 @@
 This repo is the source of our thesis, implemented in python tensorflow.  
 VŨ LÊ HOÀNG MINH 15520498  
 TRẦN KHẢ PHIÊU 15520614  
+![abnormal detection](assets/cover.JPG)
 
 ## 1. Installation (Anaconda with python3 installation)
 * Install 3rd-package dependencies of python (listed in requirements.txt)
