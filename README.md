@@ -123,5 +123,5 @@ Since the models are trained in BGR image color channels, the visualized images 
 In the demo, we change the output images from BGR to RGB.
 
 ## Reference
-"Future Frame Prediction for Anomaly Detection -- A New Baseline, CVPR 2018" - by Wen Liu, Weixin Lluo, Dongze Lian and Shenghua Gao.  
+[Future Frame Prediction for Anomaly Detection -- A New Baseline, CVPR 2018](https://arxiv.org/pdf/1712.09867.pdf) - by Wen Liu, Weixin Lluo, Dongze Lian and Shenghua Gao.  
 Thanks for [their nice work](https://github.com/StevenLiuWen/ano_pred_cvpr2018.git)!
