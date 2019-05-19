@@ -1,5 +1,5 @@
 # Future Frame Prediction for Anomaly Detection -- Phát hiện bất thường trong video bằng Dự đoán khung hình
-This repo is the source of our thesis, implemented in tensorflow.  
+This repo is the source of our thesis, implemented in python tensorflow.  
 VŨ LÊ HOÀNG MINH 15520498  
 TRẦN KHẢ PHIÊU 15520614  
 
@@ -40,12 +40,11 @@ cd pretrains
 ```
 Download pretrain models and move them to **pretrain** folder  
 [Flownet_file1](http://download943.mediafire.com/hynmczvscd4g/gfpe28rfs4tptm1/flownet-SD.ckpt-0.data-00000-of-00001)  
-[Flownet_file2](http://download1525.mediafire.com/1l504kua1zqg/feur15guonc09ul/flownet-SD.ckpt-0.meta)
-[Ped1](http://download843.mediafire.com/4r7jgo7jaebg/vj1nsd622vju6qx/ped1.data-00000-of-00001)
-[Ped2](http://download855.mediafire.com/4s8db04z901g/l241oo8msf1lg6o/ped2.data-00000-of-00001)
-[Avenue](http://download937.mediafire.com/xf5vl5dav6ag/mi9d2annamyh4bz/avenue.data-00000-of-00001)
-[Shanghaitech](http://download1649.mediafire.com/s0qjqln1qfqg/60za9d7exgv90ld/shanghaitech.data-00000-of-00001)
-
+[Flownet_file2](http://download1525.mediafire.com/1l504kua1zqg/feur15guonc09ul/flownet-SD.ckpt-0.meta)  
+[Ped1](http://download843.mediafire.com/4r7jgo7jaebg/vj1nsd622vju6qx/ped1.data-00000-of-00001)  
+[Ped2](http://download855.mediafire.com/4s8db04z901g/l241oo8msf1lg6o/ped2.data-00000-of-00001)  
+[Avenue](http://download937.mediafire.com/xf5vl5dav6ag/mi9d2annamyh4bz/avenue.data-00000-of-00001)  
+[Shanghaitech](http://download1649.mediafire.com/s0qjqln1qfqg/60za9d7exgv90ld/shanghaitech.data-00000-of-00001)  
 
 * Running the sript (as ped2 and avenue datasets for examples) and cd into **Codes** folder at first.
 ```shell
@@ -122,6 +121,6 @@ Open the browser and type **https://ip:10086**. Following is the screen shot of 
 Since the models are trained in BGR image color channels, the visualized images in tensorboard look different from RGB channels.
 In the demo, we change the output images from BGR to RGB.
 
-## Notes
-The flow loss (temporal loss) module is based on [a TensorFlow implementation of FlowNet2](https://github.com/sampepose/flownet2-tf). Thanks for their nice work.
-## Citation
+## Reference
+"Future Frame Prediction for Anomaly Detection -- A New Baseline, CVPR 2018" - by Wen Liu, Weixin Lluo, Dongze Lian and Shenghua Gao.  
+Thanks for [their nice work](https://github.com/StevenLiuWen/ano_pred_cvpr2018.git)!
