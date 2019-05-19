@@ -119,8 +119,7 @@ Open the browser and type **https://ip:10086**. Following is the screen shot of 
 ![scalars_tensorboard](assets/scalars.JPG)
 
 ![images_tensorboard](assets/images.JPG)
-Since the models are trained in BGR image color channels, the visualized images in tensorboard look different from RGB channels.
-In the demo, we change the output images from BGR to RGB.
+Since the models are trained in cv2 BGR image color channels, the visualized images in tensorboard look different from RGB channels.
 
 ## Reference
 This project is referenced from [Future Frame Prediction for Anomaly Detection -- A New Baseline, CVPR 2018](https://arxiv.org/pdf/1712.09867.pdf) - by Wen Liu, Weixin Lluo, Dongze Lian and Shenghua Gao.  
