@@ -65,7 +65,7 @@ python inference.py  --dataset  avenue    \
 ## 4. Training from scratch (here we use ped2 and avenue datasets for examples)
 * Download the pretrained FlowNet at first and see above mentioned step 3.1 
 * Set hyper-parameters
-The default hyper-parameters, such as $\lambda_{init}$, $\lambda_{gd}$, $\lambda_{op}$, $\lambda_{adv}$ and the learning rate of G, as well as D, are all initialized in **training_hyper_params/hyper_params.ini**. 
+The default hyper-parameters are all initialized in **training_hyper_params/hyper_params.ini**. 
 * Running script (as ped2 or avenue for instances) and cd into **Codes** folder at first.
 ```shell
 python train.py  --dataset  ped2    \
