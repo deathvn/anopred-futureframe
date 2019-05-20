@@ -54,7 +54,7 @@ python inference.py  --dataset  ped2    \
                     --gpu  1    \
                     --snapshot_dir    checkpoints/pretrains/ped2
 ```
-[ped2 outputvideo](https://www.youtube.com/watch?v=4Bfr0_MS1Vc&list=PLaHlllAfhKRs9pCPTMCiReXmhJvJDdXTq&index=6)
+[ped2 outvideo](https://www.youtube.com/watch?v=4Bfr0_MS1Vc&list=PLaHlllAfhKRs9pCPTMCiReXmhJvJDdXTq&index=6)
 ```shell
 python inference.py  --dataset  ped1 \
                     --test_folder  ../Data/ped1/testing/frames      \
