@@ -1,5 +1,5 @@
 # Future Frame Prediction for Anomaly Detection -- Phát hiện bất thường trong video bằng Dự đoán khung hình
-This repo is the source of our thesis, implemented in python tensorflow. [Demovideo](https://www.youtube.com/watch?v=5g9gU0_JiKU&list=PLaHlllAfhKRs9pCPTMCiReXmhJvJDdXTq&index=6&t=13s)  
+This repo is the source of our thesis, implemented in python tensorflow. [Demovideo](https://www.youtube.com/watch?v=5g9gU0_JiKU&list=PLaHlllAfhKRs9pCPTMCiReXmhJvJDdXTq&index=5)  
 VŨ LÊ HOÀNG MINH 15520498  
 TRẦN KHẢ PHIÊU   15520614  
 ![abnormal detection](assets/cover.JPG)
@@ -47,21 +47,21 @@ Download pretrain models and move them to **pretrain** folder
 [Avenue](http://download937.mediafire.com/xf5vl5dav6ag/mi9d2annamyh4bz/avenue.data-00000-of-00001)  
 [Shanghaitech](http://download1649.mediafire.com/s0qjqln1qfqg/60za9d7exgv90ld/shanghaitech.data-00000-of-00001)  
 
-* Running the sript (as ped2 and avenue datasets for examples) and cd into **Codes** folder at first.
+* Running the sript (as ped2 and ped1 datasets for examples) and cd into **Codes** folder at first.
 ```shell
 python inference.py  --dataset  ped2    \
                     --test_folder  ../Data/ped2/testing/frames      \
                     --gpu  1    \
                     --snapshot_dir    checkpoints/pretrains/ped2
 ```
-[outputvideo](https://www.youtube.com/watch?v=4Bfr0_MS1Vc&list=PLaHlllAfhKRs9pCPTMCiReXmhJvJDdXTq&index=7&t=16s)
+[ped2 outputvideo](https://www.youtube.com/watch?v=4Bfr0_MS1Vc&list=PLaHlllAfhKRs9pCPTMCiReXmhJvJDdXTq&index=6)
 ```shell
-python inference.py  --dataset  avenue    \
-                    --test_folder  ../Data/avenue/testing/frames      \
+python inference.py  --dataset  ped1 \
+                    --test_folder  ../Data/ped1/testing/frames      \
                     --gpu  1    \
-                    --snapshot_dir    checkpoints/pretrains/avenue
+                    --snapshot_dir    checkpoints/pretrains/ped1
 ```
-
+[ped1 outvideo](https://www.youtube.com/watch?v=sxYy1TH9c_A&list=PLaHlllAfhKRs9pCPTMCiReXmhJvJDdXTq&index=7)
 
 ## 4. Training from scratch (here we use ped2 and avenue datasets for examples)
 * Download the pretrained FlowNet at first and see above mentioned step 3.1 
