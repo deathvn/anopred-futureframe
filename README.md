@@ -50,16 +50,16 @@ Download pretrain models and move them to **pretrain** folder
 * Running the sript (as ped2 and ped1 datasets for examples) and cd into **Codes** folder at first.
 ```shell
 python inference.py  --dataset  ped2    \
-                    --test_folder  ../Data/ped2/testing/frames      \
-                    --gpu  1    \
-                    --snapshot_dir    checkpoints/pretrains/ped2
+                     --test_folder  ../Data/ped2/testing/frames      \
+                     --gpu  0    \
+                     --snapshot_dir    checkpoints/pretrains/ped2
 ```
 [ped2 outvideo](https://www.youtube.com/watch?v=4Bfr0_MS1Vc&list=PLaHlllAfhKRs9pCPTMCiReXmhJvJDdXTq&index=6)
 ```shell
 python inference.py  --dataset  ped1 \
-                    --test_folder  ../Data/ped1/testing/frames      \
-                    --gpu  1    \
-                    --snapshot_dir    checkpoints/pretrains/ped1
+                     --test_folder  ../Data/ped1/testing/frames      \
+                     --gpu  0    \
+                     --snapshot_dir    checkpoints/pretrains/ped1
 ```
 [ped1 outvideo](https://www.youtube.com/watch?v=sxYy1TH9c_A&list=PLaHlllAfhKRs9pCPTMCiReXmhJvJDdXTq&index=7)
 
