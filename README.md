@@ -41,8 +41,7 @@ git clone https://github.com/deathvn/pretrains
 cd pretrains
 ```
 Download pretrain models and move them to **pretrain** folder  
-[Flownet_file1](http://download943.mediafire.com/hynmczvscd4g/gfpe28rfs4tptm1/flownet-SD.ckpt-0.data-00000-of-00001)  
-[Flownet_file2](http://download1525.mediafire.com/1l504kua1zqg/feur15guonc09ul/flownet-SD.ckpt-0.meta)  
+[Flownet_file1](http://download943.mediafire.com/hynmczvscd4g/gfpe28rfs4tptm1/flownet-SD.ckpt-0.data-00000-of-00001), [Flownet_file2](http://download1525.mediafire.com/1l504kua1zqg/feur15guonc09ul/flownet-SD.ckpt-0.meta)  
 [Ped1](http://download843.mediafire.com/4r7jgo7jaebg/vj1nsd622vju6qx/ped1.data-00000-of-00001)  
 [Ped2](http://download855.mediafire.com/4s8db04z901g/l241oo8msf1lg6o/ped2.data-00000-of-00001)  
 [Avenue](http://download937.mediafire.com/xf5vl5dav6ag/mi9d2annamyh4bz/avenue.data-00000-of-00001)  
