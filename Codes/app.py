@@ -25,10 +25,6 @@ def hello_world():
         os.remove(frames_path + '/' + dels)
         
     if request.method == 'GET':
-        
-        
-        
-        #return render_template('result.html')
         return render_template('index.html', value='hi')
         
         
@@ -41,12 +37,9 @@ def hello_world():
             filename = secure_filename(_file.filename)
             _file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         
-        !python inference.py --dataset  ped2    \
-                    --test_folder  ../uploads      \
-                    --gpu  0    \
-                    --snapshot_dir    checkpoints/pretrains/ped2    \
-                    --evaluate compute_auc
+        run_cmd_script = 'python inference.py --dataset ped2 --test_folder ../uploads --gpu 0 --snapshot_dir checkpoints/pretrains/ped2 --evaluate compute_auc'
         
+        os.system(run_cmd_script)
         os.system('ffmpeg -f image2 -r 20 -i ./frames/%04d.jpg -vcodec libx264 -acodec aac -y static/video.mp4')
 		
         return render_template('result.html')
