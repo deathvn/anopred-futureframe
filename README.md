@@ -1,7 +1,7 @@
 # Future Frame Prediction for Anomaly Detection -- Phát hiện bất thường trong video bằng Dự đoán khung hình
-This repo is the source of our thesis, implemented in python tensorflow.  
+This repo is the source of our thesis, implemented in python tensorflow. [Demovideo](https://www.youtube.com/watch?v=5g9gU0_JiKU&list=PLaHlllAfhKRs9pCPTMCiReXmhJvJDdXTq&index=6&t=13s)  
 VŨ LÊ HOÀNG MINH 15520498  
-TRẦN KHẢ PHIÊU 15520614  
+TRẦN KHẢ PHIÊU   15520614  
 ![abnormal detection](assets/cover.JPG)
 
 ## 1. Installation (Anaconda with python3 installation)
