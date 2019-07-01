@@ -43,10 +43,7 @@ with tf.name_scope('dataset'):
 with tf.variable_scope('generator', reuse=None):
     print('testing = {}'.format(tf.get_variable_scope().name))
     test_outputs = generator(test_inputs, layers=4, output_channel=3)
-    print ("test_outputs: ",test_outputs)
     test_psnr_error = psnr_error(gen_frames=test_outputs, gt_frames=test_gt)
-    truth = test_gt
-    loss_val = tf.abs((test_outputs - test_gt)*255)
 
 
 config = tf.ConfigProto()
@@ -73,14 +70,12 @@ with tf.Session(config=config) as sess:
         num_videos = len(videos_info.keys())
         total = 0
         timestamp = time.time()
-        img_path = test_folder + '/' + '01/000.jpg'
-        frame = cv2.imread(img_path)
-        H, W = frame.shape[:2]
-        it = 0
+
         for video_name, video in videos_info.items():
             length = video['length']
             total += length
             psnrs = np.empty(shape=(length,), dtype=np.float32)
+
             for i in range(num_his, length):
                 video_clip = data_loader.get_video_clips(video_name, i - num_his, i + 1)
                 psnr = sess.run(test_psnr_error,
@@ -89,15 +84,7 @@ with tf.Session(config=config) as sess:
 
                 print('video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(
                     video_name, num_videos, i, length, psnr))
-                    
-                l_val = sess.run(loss_val, feed_dict={test_video_clips_tensor: video_clip[np.newaxis, ...]})
-                l_val = np.uint8(l_val)
-                l_val = l_val.reshape(256, 256, 3)                
-                l_val = cv2.resize(l_val, (W,H))
-                
-                frame_out = 'frames/' + '{:04}'.format(it) + ".jpg"
-                cv2.imwrite(frame_out, l_val)
-                it+=1
+
             psnrs[0:num_his] = psnrs[num_his]
             psnr_records.append(psnrs)
 
