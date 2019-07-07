@@ -3,12 +3,13 @@ import os
 import time
 import numpy as np
 import pickle
-
+import cv2
+from sklearn.metrics import accuracy_score
 
 from models import generator
 from utils import DataLoader, load, save, psnr_error
 from constant import const
-import evaluate
+import app_evaluate as evaluate
 
 
 slim = tf.contrib.slim
@@ -26,7 +27,21 @@ snapshot_dir = const.SNAPSHOT_DIR
 psnr_dir = const.PSNR_DIR
 evaluate_name = const.EVALUATE
 
-print(const)
+print("This is const = ", const)
+
+def image2_bin(img):
+    new_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    new_image[new_image<30] = 0
+    Sum = 0
+    count = 0
+    for im_col in new_image:
+        for im_cel in im_col:
+            if im_cel!=0:
+                Sum += im_cel
+                count+=1
+    avg_val = Sum//count
+    new_image[new_image<avg_val]=0
+    return new_image
 
 
 # define dataset
@@ -43,7 +58,10 @@ with tf.name_scope('dataset'):
 with tf.variable_scope('generator', reuse=None):
     print('testing = {}'.format(tf.get_variable_scope().name))
     test_outputs = generator(test_inputs, layers=4, output_channel=3)
+    print ("test_outputs: ",test_outputs)
     test_psnr_error = psnr_error(gen_frames=test_outputs, gt_frames=test_gt)
+    truth = test_gt
+    loss_val = tf.abs((test_outputs - test_gt)*255)
 
 
 config = tf.ConfigProto()
@@ -71,6 +89,7 @@ with tf.Session(config=config) as sess:
         total = 0
         timestamp = time.time()
 
+        
         for video_name, video in videos_info.items():
             length = video['length']
             total += length
@@ -82,28 +101,72 @@ with tf.Session(config=config) as sess:
                                 feed_dict={test_video_clips_tensor: video_clip[np.newaxis, ...]})
                 psnrs[i] = psnr
 
-                print('video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(
+                print('ano 1 in inference ::', 'video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(
                     video_name, num_videos, i, length, psnr))
 
             psnrs[0:num_his] = psnrs[num_his]
             psnr_records.append(psnrs)
+        
+        scores = np.array([], dtype=np.float32)
+        # video normalization
+        for i in range(num_videos):
+            distance = psnr_records[i]
 
-        #result_dict = {'dataset': dataset_name, 'psnr': psnr_records, 'flow': [], 'names': [], 'diff_mask': []}
+            distance -= distance.min()  # distances = (distance - min) / (max - min)
+            distance /= distance.max()
+            # distance = 1 - distance
+            scores = np.concatenate((scores, distance[4:]), axis=0)
 
         used_time = time.time() - timestamp
         print('total time = {}, fps = {}'.format(used_time, total / used_time))
-        '''
-        # TODO specify what's the actual name of ckpt.
-        pickle_path = os.path.join(psnr_dir, os.path.split(ckpt)[-1])
-        with open(pickle_path, 'wb') as writer:
-            pickle.dump(result_dict, writer, pickle.HIGHEST_PROTOCOL)
-
-        results = evaluate.evaluate(evaluate_name, pickle_path)
-        print(results)
-        '''
+       
+        inp_path = '../'
+        out_path = 'frames/'
         
-    inference_func(snapshot_dir, dataset_name, evaluate_name)
-    '''
+        it = 0
+        testPredict = np.zeros(scores.shape, dtype=int)
+        thres = 0.6
+        
+        for video_name, video in videos_info.items():
+            length = video['length']
+            
+            #save_npy_file = 'npy/' + video_name + '.npy'
+            dat = np.zeros(length)
+            
+            for i in range(num_his, length):
+                if scores[it] >= thres:
+                    k=0
+                else:
+                    k=1
+                testPredict[it] = k
+                print('videos = {} / {}, i = {} / {}, Scores = {:.6f}, -{} - {} '.format(
+                    video_name, num_videos, i, length, scores[it], 'Abnorm'if k==1 else 'Normal' , k))
+                
+                dat[i] = scores[it]
+                
+                # Make output video
+                img_path = inp_path + video_name + '/' + '{:03}'.format(i) + '.jpg'
+                print ("img paht:", video_name)
+                frame_out = out_path + '{:04}'.format(it) + ".jpg"
+                frame = cv2.imread(img_path)
+                H, W = frame.shape[:2]
+                
+                video_clip = data_loader.get_video_clips(video_name, i - num_his, i + 1)
+                l_val = sess.run(loss_val, feed_dict={test_video_clips_tensor: video_clip[np.newaxis, ...]})
+                l_val = np.uint8(l_val)                
+                l_val = l_val.reshape(256, 256, 3)                
+                l_val = cv2.resize(l_val, (W,H))
+                l_val = image2_bin(l_val)
+                
+                if k==1:
+                    cv2.rectangle(frame, (0,0), (W, H), (0, 0, 255), thickness=10, lineType=8, shift=0)
+                    frame[l_val!=0] = (0,255,255)
+                cv2.imwrite(frame_out, frame)
+                
+                it = it+1
+                
+            #np.save(save_npy_file, dat)
+
     if os.path.isdir(snapshot_dir):
         def check_ckpt_valid(ckpt_name):
             is_valid = False
@@ -149,4 +212,3 @@ with tf.Session(config=config) as sess:
             time.sleep(60)
     else:
         inference_func(snapshot_dir, dataset_name, evaluate_name)
-    '''

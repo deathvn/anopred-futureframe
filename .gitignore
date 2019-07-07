@@ -119,10 +119,12 @@ Codes/__pycache__/pix2pix.cpython-36.pyc
 .idea/codeStyles/codeStyleConfig.xml
 .idea/codeStyles/codeStyleConfig.xml
 Data/
+uploads/01/
 Codes/checkpoints/
 Codes/__pycache__
 Codes/summary/
 Codes/psnrs/
-Codes/static/
+Codes/static/videos/
 Codes/*.sav
 Codes/*.npy
+Codes/frames/

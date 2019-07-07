@@ -7,6 +7,11 @@ from sklearn import metrics
 import json
 import socket
 
+import numpy as np
+import matplotlib.pyplot as plt
+from itertools import cycle
+from scipy import interp
+
 
 # data folder contain all datasets, such as ped1, ped2, avenue, shanghaitech, etc
 DATA_DIR = '../Data'
@@ -349,6 +354,7 @@ def precision_recall_auc(loss_file):
     for sub_loss_file in loss_file_list:
         dataset, scores, labels = get_scores_labels(sub_loss_file)
         precision, recall, thresholds = metrics.precision_recall_curve(labels, scores, pos_label=0)
+        
         auc = metrics.auc(recall, precision)
 
         results = RecordResult(recall, precision, auc, dataset, sub_loss_file)
@@ -419,11 +425,45 @@ def compute_auc(loss_file):
                 # distance = 1 - distance
 
             scores = np.concatenate((scores, distance[DECIDABLE_IDX:]), axis=0)
-            labels = np.concatenate((labels, gt[i][DECIDABLE_IDX:]), axis=0)
-
+            
+            labels = np.concatenate((labels, gt[i][DECIDABLE_IDX:]), axis=0)          
+            
         fpr, tpr, thresholds = metrics.roc_curve(labels, scores, pos_label=0)
         auc = metrics.auc(fpr, tpr)
-
+        
+        '''
+        print ("Scores: ", scores.shape)
+        print (scores)
+        print ("Thresholds: ", thresholds.shape)
+        print (thresholds)
+        print ("FPR: ", fpr.shape)
+        print (fpr)
+        print ("TPR: ", tpr.shape)
+        print (tpr)
+        '''
+        
+        fig = plt.figure()
+        lw = 2
+        plt.plot(fpr, tpr, color='darkorange', lw=lw, label='ROC curve (area = %0.2f)' % auc)
+        plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+        plt.xlim([0.0, 1.0])
+        plt.ylim([0.0, 1.05])
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate')
+        plt.title('Receiver operating characteristic example')
+        plt.legend(loc="lower right")
+        #plt.show()
+        fig.savefig('/content/my_graph_figure.png')
+               
+        
+        k=0
+        temp=0
+        for i in range(fpr.shape[0]):
+            if (tpr[i] - fpr[i] >= temp):
+                k = i
+                temp = tpr[i] - fpr[i]
+        print ("thershold: ", thresholds[k])
+        
         results = RecordResult(fpr, tpr, auc, dataset, sub_loss_file)
 
         if optimal_results < results:
@@ -432,7 +472,7 @@ def compute_auc(loss_file):
         if os.path.isdir(loss_file):
             print(results)
     print('##### optimal result and model = {}'.format(optimal_results))
-    return optimal_results
+    return optimal_results, scores, labels, thresholds[k]
 
 
 def average_psnr(loss_file):
@@ -506,8 +546,11 @@ def calculate_score(loss_file):
 
     mean_normal_scores = np.mean(scores[labels == 0])
     mean_abnormal_scores = np.mean(scores[labels == 1])
+    
     print('mean normal scores = {}, mean abnormal scores = {}, '
           'delta = {}'.format(mean_normal_scores, mean_abnormal_scores, mean_normal_scores - mean_abnormal_scores))
+    
+    #print(scores)
 
 
 def test_func(*args):
@@ -557,8 +600,8 @@ def evaluate(eval_type, save_file):
     assert eval_type in eval_type_function, 'there is no type of evaluation {}, please check {}' \
         .format(eval_type, eval_type_function.keys())
     eval_func = eval_type_function[eval_type]
-    optimal_results = eval_func(save_file)
-    return optimal_results
+    optimal_results, scores, labels, thres = eval_func(save_file)
+    return optimal_results, scores, labels, thres
 
 
 if __name__ == '__main__':
