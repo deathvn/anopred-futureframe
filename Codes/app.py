@@ -40,13 +40,23 @@ def home():
         
     if request.method == 'POST':
         pretrain = request.form['pretrain_options']
-        uploaded_files = request.files.getlist('file[]')
         
-        for _file in uploaded_files:        
-            filename = secure_filename(_file.filename)
-            _file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        print ("pretrain", pretrain)
+        dataset = request.form.get('data_options')
+
+        print ("dataset", dataset)
+        if dataset!="":
+            test_folder = '../Data/' + dataset + '/testing/frames'
+        else:
+            test_folder = '../uploads'
+            uploaded_files = request.files.getlist('file[]')
+            
+            for _file in uploaded_files:
+                filename = secure_filename(_file.filename)
+                _file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         
-        run_ano_script = 'python app_inference.py --dataset ped2 --test_folder ../uploads --gpu 0 --snapshot_dir checkpoints/pretrains/'+pretrain
+        run_ano_script = 'python app_inference.py --dataset ped2 --test_folder ' + test_folder + ' --gpu 0 --snapshot_dir checkpoints/pretrains/'+pretrain
+
         os.system(run_ano_script)
         os.system(make_video_script)
 		
