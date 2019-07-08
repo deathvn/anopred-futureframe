@@ -4,6 +4,7 @@ from werkzeug.utils import secure_filename
 import os
 import cv2
 import shutil
+import time
 
 def make_overwritefolder(path):
     if os.path.exists(path):
@@ -15,10 +16,9 @@ ALLOWED_EXTENSIONS = set(['jpg'])
 frames_path = 'frames'
 npy_path = 'npy'
 result_video_path = 'static/videos'
-video_name = 'test'
+video_name = 'test' + str(time.time())
 out_video = result_video_path + '/' + video_name + '.mp4'
 
-run_ano_script = 'python app_inference.py --dataset ped2 --test_folder ../uploads --gpu 0 --snapshot_dir checkpoints/pretrains/ped2'
 make_video_script = 'ffmpeg -f image2 -r 20 -i ./frames/%04d.jpg -vcodec libx264 -acodec aac -y ' + out_video
 
 
@@ -35,7 +35,7 @@ def home():
     make_overwritefolder(result_video_path)
         
     if request.method == 'GET': 
-        return render_template('index.html', css=url_for('static', filename='indexstyle.css'), icon=url_for('static', filename='asset/bowsett.ico'))
+        return render_template('index.html')
         
         
     if request.method == 'POST':
@@ -46,10 +46,11 @@ def home():
             filename = secure_filename(_file.filename)
             _file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         
+        run_ano_script = 'python app_inference.py --dataset ped2 --test_folder ../uploads --gpu 0 --snapshot_dir checkpoints/pretrains/'+pretrain
         os.system(run_ano_script)
         os.system(make_video_script)
 		
-        return render_template('result.html', css=url_for('static', filename='resultstyle.css'), video_path=out_video)
+        return render_template('result.html', video_path=out_video)
     
 
 if __name__ == '__main__':
