@@ -6,14 +6,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" type="image/x-icon" href="static/asset/bowsett.ico">
   <link href="https://fonts.googleapis.com/css?family=Raleway:200,300,400,500,600,700,800" rel="stylesheet">
-  <link rel="stylesheet" href="static/resultstyle.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .hero-image {
+      background-image: url("static/asset/result-image.jpg");
+      background-color: #cccccc;
+      height: 800px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      position: relative;
+    }
+
+    .output-video {
+      position: absolute;
+      margin: auto;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 85vh;
+    }
+  </style>
 </head>
 
 <body>
 <div class="hero-image">
 
-<video class="output-video" controls autoplay loop>
-    <source src="static/videos/video.mp4" type='video/mp4'/>
+<video class="output-video" controls>
+    <source src="{{ video_path }}" type='video/mp4'/>
     Your browser does not support the video tag.
 </video>
 

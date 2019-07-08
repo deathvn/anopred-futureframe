@@ -101,7 +101,7 @@ with tf.Session(config=config) as sess:
                                 feed_dict={test_video_clips_tensor: video_clip[np.newaxis, ...]})
                 psnrs[i] = psnr
 
-                print('ano 1 in inference ::', 'video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(
+                print('video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(
                     video_name, num_videos, i, length, psnr))
 
             psnrs[0:num_his] = psnrs[num_his]
@@ -120,7 +120,7 @@ with tf.Session(config=config) as sess:
         used_time = time.time() - timestamp
         print('total time = {}, fps = {}'.format(used_time, total / used_time))
        
-        inp_path = '../'
+        inp_path = '../uploads/'
         out_path = 'frames/'
         
         it = 0
@@ -146,7 +146,7 @@ with tf.Session(config=config) as sess:
                 
                 # Make output video
                 img_path = inp_path + video_name + '/' + '{:03}'.format(i) + '.jpg'
-                print ("img paht:", video_name)
+                print ("img paht:", img_path)
                 frame_out = out_path + '{:04}'.format(it) + ".jpg"
                 frame = cv2.imread(img_path)
                 H, W = frame.shape[:2]
