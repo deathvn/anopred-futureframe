@@ -45,7 +45,7 @@ def home():
         dataset = request.form.get('data_options')
 
         print ("dataset", dataset)
-        if dataset!="":
+        if dataset!=None:
             test_folder = '../Data/' + dataset + '/testing/frames'
         else:
             test_folder = '../uploads'
