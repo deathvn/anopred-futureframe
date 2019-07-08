@@ -19,7 +19,7 @@ result_video_path = 'static/videos'
 video_name = 'test' + str(time.time())
 out_video = result_video_path + '/' + video_name + '.mp4'
 
-make_video_script = 'ffmpeg -f image2 -r 20 -i ./frames/%04d.jpg -vcodec libx264 -acodec aac -y ' + out_video
+make_video_script = 'ffmpeg -f image2 -r 20 -i ./frames/%06d.jpg -vcodec libx264 -acodec aac -y ' + out_video
 
 
 app = Flask(__name__)

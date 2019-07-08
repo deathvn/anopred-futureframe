@@ -147,7 +147,7 @@ with tf.Session(config=config) as sess:
                 # Make output video
                 img_path = inp_path + video_name + '/' + '{:03}'.format(i) + '.jpg'
                 print ("img paht:", img_path)
-                frame_out = out_path + '{:04}'.format(it) + ".jpg"
+                frame_out = out_path + '{:06}'.format(it) + ".jpg"
                 frame = cv2.imread(img_path)
                 H, W = frame.shape[:2]
                 
