@@ -128,3 +128,5 @@ Codes/static/videos/
 Codes/*.sav
 Codes/*.npy
 Codes/frames/
+Codes/mask/
+COdes/static/plot/

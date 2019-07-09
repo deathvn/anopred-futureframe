@@ -5,6 +5,7 @@ import numpy as np
 import pickle
 import cv2
 from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
 
 from models import generator
 from utils import DataLoader, load, save, psnr_error
@@ -64,6 +65,7 @@ with tf.variable_scope('generator', reuse=None):
     test_psnr_error = psnr_error(gen_frames=test_outputs, gt_frames=test_gt)
     truth = test_gt
     loss_val = tf.abs((test_outputs - test_gt)*255)
+    psnr_and_mask = test_psnr_error, loss_val
 
 
 config = tf.ConfigProto()
@@ -182,7 +184,9 @@ with tf.Session(config=config) as sess:
         total = 0
         timestamp = time.time()
 
+        mask_path = 'mask/'
         
+        it = 0
         for video_name, video in videos_info.items():
             length = video['length']
             total += length
@@ -190,19 +194,25 @@ with tf.Session(config=config) as sess:
 
             for i in range(num_his, length):
                 video_clip = data_loader.get_video_clips(video_name, i - num_his, i + 1)
-                psnr = sess.run(test_psnr_error,
+                psnr, mask = sess.run(psnr_and_mask,
                                 feed_dict={test_video_clips_tensor: video_clip[np.newaxis, ...]})
                 psnrs[i] = psnr
+                
+                mask = np.uint8(mask)                
+                mask = mask.reshape(256, 256, 3)
+                np.save(mask_path + '{:06}'.format(it) + ".npy", mask)
 
                 print('video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(
                     video_name, num_videos, i, length, psnr))
+                    
+                it += 1
 
             psnrs[0:num_his] = psnrs[num_his]
             psnr_records.append(psnrs)
 
         used_time = time.time() - timestamp
         print('total time = {}, fps = {}'.format(used_time, total / used_time))
-
+        result_dict = {'dataset': dataset_name, 'psnr': psnr_records, 'flow': [], 'names': [], 'diff_mask': []}
         # TODO specify what's the actual name of ckpt.
         pickle_path = os.path.join(psnr_dir, os.path.split(ckpt)[-1])
         with open(pickle_path, 'wb') as writer:
@@ -218,13 +228,14 @@ with tf.Session(config=config) as sess:
         it = 0
         testPredict = np.zeros(scores.shape, dtype=int)
         #thres = 0.6
+        mask_list = os.listdir(mask_path)
         
         for video_name, video in videos_info.items():
             
             length = video['length']
             new_video_name = video_name.split('\\')[-1]
             
-            #save_npy_file = 'npy/' + video_name + '.npy'
+            save_npy_file = 'npy/' + new_video_name + '.npy'
             dat = np.zeros(length)
             
             frames_list = os.listdir(inp_path + '/' + new_video_name)
@@ -241,16 +252,13 @@ with tf.Session(config=config) as sess:
                 
                 # Make output video
                 img_path = inp_path + '/' + new_video_name + '/' + frames_list[i]
-                print ("img paht:", img_path)
+                print ("img path:", img_path)
                 frame_out = out_path + '{:06}'.format(it) + ".jpg"
                 print ("frames out:", frame_out)
                 frame = cv2.imread(img_path)
                 H, W = frame.shape[:2]
                 
-                video_clip = data_loader.get_video_clips(video_name, i - num_his, i + 1)
-                l_val = sess.run(loss_val, feed_dict={test_video_clips_tensor: video_clip[np.newaxis, ...]})
-                l_val = np.uint8(l_val)                
-                l_val = l_val.reshape(256, 256, 3)                
+                l_val = np.load(mask_path + mask_list[it])               
                 l_val = cv2.resize(l_val, (W,H))
                 l_val = image2_bin(l_val)
                 
@@ -260,7 +268,17 @@ with tf.Session(config=config) as sess:
                 cv2.imwrite(frame_out, frame)
                 
                 it = it+1
-                
+            
+            print ("dat_shape", dat.shape)
+            fig = plt.figure()
+            lw = 2
+            plt.plot(np.arange(4, length), dat[4:], color='darkorange', lw=lw)
+            plt.xlim([0, length])
+            plt.ylim([0.00, 1.00])
+            plt.xlabel('Frame')
+            plt.ylabel('Score')
+            plt.title('Video '+ new_video_name +' Score')
+            fig.savefig('static/plot/'+ new_video_name + '.png')
             #np.save(save_npy_file, dat)
     if dataset_name=='upload':
         inference_func(snapshot_dir, dataset_name, evaluate_name)
