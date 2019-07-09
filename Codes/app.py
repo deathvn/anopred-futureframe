@@ -8,10 +8,8 @@ import time
 
 def make_overwritefolder(path):
     if os.path.exists(path):
-        del_comand = 'rm -R ' + path
-        os.system(del_comand)
-    make_comand = 'mkdir ' + path
-    os.system(make_comand)
+        shutil.rmtree('./' + path, ignore_errors=True)
+    os.makedirs(path)
 
 UPLOAD_FOLDER = '../uploads/01'
 ALLOWED_EXTENSIONS = set(['jpg'])
