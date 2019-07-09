@@ -48,6 +48,7 @@ def home():
         if dataset!=None:
             test_folder = '../Data/' + dataset + '/testing/frames'
         else:
+            dataset = 'upload'
             test_folder = '../uploads'
             uploaded_files = request.files.getlist('file[]')
             

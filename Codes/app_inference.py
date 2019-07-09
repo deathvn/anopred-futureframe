@@ -173,4 +173,96 @@ with tf.Session(config=config) as sess:
                 
             #np.save(save_npy_file, dat)
 
-    inference_func(snapshot_dir, dataset_name, evaluate_name)
+    def label_inference_func(ckpt, dataset_name, evaluate_name):
+        load(loader, sess, ckpt)
+
+        psnr_records = []
+        videos_info = data_loader.videos
+        num_videos = len(videos_info.keys())
+        total = 0
+        timestamp = time.time()
+
+        
+        for video_name, video in videos_info.items():
+            length = video['length']
+            total += length
+            psnrs = np.empty(shape=(length,), dtype=np.float32)
+
+            for i in range(num_his, length):
+                video_clip = data_loader.get_video_clips(video_name, i - num_his, i + 1)
+                psnr = sess.run(test_psnr_error,
+                                feed_dict={test_video_clips_tensor: video_clip[np.newaxis, ...]})
+                psnrs[i] = psnr
+
+                print('video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(
+                    video_name, num_videos, i, length, psnr))
+
+            psnrs[0:num_his] = psnrs[num_his]
+            psnr_records.append(psnrs)
+
+        used_time = time.time() - timestamp
+        print('total time = {}, fps = {}'.format(used_time, total / used_time))
+
+        # TODO specify what's the actual name of ckpt.
+        pickle_path = os.path.join(psnr_dir, os.path.split(ckpt)[-1])
+        with open(pickle_path, 'wb') as writer:
+            pickle.dump(result_dict, writer, pickle.HIGHEST_PROTOCOL)
+
+        results, scores, labels, thres = evaluate.evaluate(evaluate_name, pickle_path)
+        print(results)
+        #end TODO
+       
+        inp_path = test_folder
+        out_path = 'frames/'
+        
+        it = 0
+        testPredict = np.zeros(scores.shape, dtype=int)
+        #thres = 0.6
+        
+        for video_name, video in videos_info.items():
+            
+            length = video['length']
+            new_video_name = video_name.split('\\')[-1]
+            
+            #save_npy_file = 'npy/' + video_name + '.npy'
+            dat = np.zeros(length)
+            
+            frames_list = os.listdir(inp_path + '/' + new_video_name)
+            for i in range(num_his, length):
+                if scores[it] >= thres:
+                    k=0
+                else:
+                    k=1
+                testPredict[it] = k
+                print('videos = {} / {}, i = {} / {}, Scores = {:.6f}, -{} - {} '.format(
+                    video_name, num_videos, i, length, scores[it], 'Abnorm'if k==1 else 'Normal' , k))
+                
+                dat[i] = scores[it]
+                
+                # Make output video
+                img_path = inp_path + '/' + new_video_name + '/' + frames_list[i]
+                print ("img paht:", img_path)
+                frame_out = out_path + '{:06}'.format(it) + ".jpg"
+                print ("frames out:", frame_out)
+                frame = cv2.imread(img_path)
+                H, W = frame.shape[:2]
+                
+                video_clip = data_loader.get_video_clips(video_name, i - num_his, i + 1)
+                l_val = sess.run(loss_val, feed_dict={test_video_clips_tensor: video_clip[np.newaxis, ...]})
+                l_val = np.uint8(l_val)                
+                l_val = l_val.reshape(256, 256, 3)                
+                l_val = cv2.resize(l_val, (W,H))
+                l_val = image2_bin(l_val)
+                
+                if k==1:
+                    cv2.rectangle(frame, (0,0), (W, H), (0, 0, 255), thickness=5, lineType=8, shift=0)
+                    frame[l_val!=0] = (0,255,255)
+                cv2.imwrite(frame_out, frame)
+                
+                it = it+1
+                
+            #np.save(save_npy_file, dat)
+    if dataset_name=='upload':
+        inference_func(snapshot_dir, dataset_name, evaluate_name)
+    else:
+        label_inference_func(snapshot_dir, dataset_name, evaluate_name)
