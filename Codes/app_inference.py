@@ -39,6 +39,8 @@ def image2_bin(img):
             if im_cel!=0:
                 Sum += im_cel
                 count+=1
+    if count==0:
+        return new_image
     avg_val = Sum//count
     new_image[new_image<avg_val]=0
     return new_image
@@ -120,7 +122,7 @@ with tf.Session(config=config) as sess:
         used_time = time.time() - timestamp
         print('total time = {}, fps = {}'.format(used_time, total / used_time))
        
-        inp_path = '../uploads/'
+        inp_path = test_folder
         out_path = 'frames/'
         
         it = 0
@@ -128,11 +130,14 @@ with tf.Session(config=config) as sess:
         thres = 0.6
         
         for video_name, video in videos_info.items():
+            
             length = video['length']
+            new_video_name = video_name.split('\\')[-1]
             
             #save_npy_file = 'npy/' + video_name + '.npy'
             dat = np.zeros(length)
             
+            frames_list = os.listdir(inp_path + '/' + new_video_name)
             for i in range(num_his, length):
                 if scores[it] >= thres:
                     k=0
@@ -145,9 +150,10 @@ with tf.Session(config=config) as sess:
                 dat[i] = scores[it]
                 
                 # Make output video
-                img_path = inp_path + video_name + '/' + '{:03}'.format(i) + '.jpg'
+                img_path = inp_path + '/' + new_video_name + '/' + frames_list[i]
                 print ("img paht:", img_path)
                 frame_out = out_path + '{:06}'.format(it) + ".jpg"
+                print ("frames out:", frame_out)
                 frame = cv2.imread(img_path)
                 H, W = frame.shape[:2]
                 
@@ -167,48 +173,4 @@ with tf.Session(config=config) as sess:
                 
             #np.save(save_npy_file, dat)
 
-    if os.path.isdir(snapshot_dir):
-        def check_ckpt_valid(ckpt_name):
-            is_valid = False
-            ckpt = ''
-            if ckpt_name.startswith('model.ckpt-'):
-                ckpt_name_splits = ckpt_name.split('.')
-                ckpt = str(ckpt_name_splits[0]) + '.' + str(ckpt_name_splits[1])
-                ckpt_path = os.path.join(snapshot_dir, ckpt)
-                if os.path.exists(ckpt_path + '.index') and os.path.exists(ckpt_path + '.meta') and \
-                        os.path.exists(ckpt_path + '.data-00000-of-00001'):
-                    is_valid = True
-
-            return is_valid, ckpt
-
-        def scan_psnr_folder():
-            tested_ckpt_in_psnr_sets = set()
-            for test_psnr in os.listdir(psnr_dir):
-                tested_ckpt_in_psnr_sets.add(test_psnr)
-            return tested_ckpt_in_psnr_sets
-
-        def scan_model_folder():
-            saved_models = set()
-            for ckpt_name in os.listdir(snapshot_dir):
-                is_valid, ckpt = check_ckpt_valid(ckpt_name)
-                if is_valid:
-                    saved_models.add(ckpt)
-            return saved_models
-
-        tested_ckpt_sets = scan_psnr_folder()
-        while True:
-            all_model_ckpts = scan_model_folder()
-            new_model_ckpts = all_model_ckpts - tested_ckpt_sets
-
-            for ckpt_name in new_model_ckpts:
-                # inference
-                ckpt = os.path.join(snapshot_dir, ckpt_name)
-                inference_func(ckpt, dataset_name, evaluate_name)
-
-                tested_ckpt_sets.add(ckpt_name)
-
-            print('waiting for models...')
-            evaluate.evaluate('compute_auc', psnr_dir)
-            time.sleep(60)
-    else:
-        inference_func(snapshot_dir, dataset_name, evaluate_name)
+    inference_func(snapshot_dir, dataset_name, evaluate_name)

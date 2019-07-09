@@ -9,7 +9,7 @@ import time
 def make_overwritefolder(path):
     if os.path.exists(path):
         shutil.rmtree(path)
-        os.makedirs(path)
+    os.makedirs(path)
 
 UPLOAD_FOLDER = '../uploads/01'
 ALLOWED_EXTENSIONS = set(['jpg'])
@@ -29,10 +29,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER # upload file
 @app.route('/', methods=['GET', 'POST'])
 def home():
     #print (request.method)
-    make_overwritefolder(UPLOAD_FOLDER)
-    make_overwritefolder(npy_path)
-    make_overwritefolder(frames_path)
-    make_overwritefolder(result_video_path)
+    #make_overwritefolder(UPLOAD_FOLDER)
+    #make_overwritefolder(npy_path)
+    #make_overwritefolder(frames_path)
+    #make_overwritefolder(result_video_path)
         
     if request.method == 'GET': 
         return render_template('index.html')
@@ -55,7 +55,7 @@ def home():
                 filename = secure_filename(_file.filename)
                 _file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         
-        run_ano_script = 'python app_inference.py --dataset ped2 --test_folder ' + test_folder + ' --gpu 0 --snapshot_dir checkpoints/pretrains/'+pretrain
+        run_ano_script = 'python app_inference.py --dataset ' + dataset +' --test_folder ' + test_folder + ' --gpu 0 --snapshot_dir checkpoints/pretrains/'+pretrain
 
         os.system(run_ano_script)
         os.system(make_video_script)

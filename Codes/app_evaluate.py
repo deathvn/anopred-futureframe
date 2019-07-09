@@ -66,6 +66,7 @@ class RecordResult(object):
 
 class GroundTruthLoader(object):
     AVENUE = 'avenue'
+    UIT = 'uit'
     PED1 = 'ped1'
     PED1_PIXEL_SUBSET = 'ped1_pixel_subset'
     PED2 = 'ped2'
@@ -78,6 +79,7 @@ class GroundTruthLoader(object):
 
     NAME_MAT_MAPPING = {
         AVENUE: os.path.join(DATA_DIR, 'avenue/avenue.mat'),
+        UIT: os.path.join(DATA_DIR, 'uit/uit.mat'),
         PED1: os.path.join(DATA_DIR, 'ped1/ped1.mat'),
         PED2: os.path.join(DATA_DIR, 'ped2/ped2.mat'),
         ENTRANCE: os.path.join(DATA_DIR, 'enter/enter.mat'),
@@ -86,6 +88,7 @@ class GroundTruthLoader(object):
 
     NAME_FRAMES_MAPPING = {
         AVENUE: os.path.join(DATA_DIR, 'avenue/testing/frames'),
+        UIT: os.path.join(DATA_DIR, 'uit/uit.mat'),
         PED1: os.path.join(DATA_DIR, 'ped1/testing/frames'),
         PED2: os.path.join(DATA_DIR, 'ped2/testing/frames'),
         ENTRANCE: os.path.join(DATA_DIR, 'enter/testing/frames'),
@@ -453,7 +456,7 @@ def compute_auc(loss_file):
         plt.title('Receiver operating characteristic example')
         plt.legend(loc="lower right")
         #plt.show()
-        fig.savefig('/content/my_graph_figure.png')
+        fig.savefig('static/my_graph_figure.png')
                
         
         k=0
