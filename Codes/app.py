@@ -8,8 +8,10 @@ import time
 
 def make_overwritefolder(path):
     if os.path.exists(path):
-        shutil.rmtree(path)
-    os.makedirs(path)
+        del_comand = 'rm -R ' + path
+        os.system(del_comand)
+    make_comand = 'mkdir ' + path
+    os.system(make_comand)
 
 UPLOAD_FOLDER = '../uploads/01'
 ALLOWED_EXTENSIONS = set(['jpg'])
@@ -29,10 +31,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER # upload file
 @app.route('/', methods=['GET', 'POST'])
 def home():
     #print (request.method)
-    #make_overwritefolder(UPLOAD_FOLDER)
-    #make_overwritefolder(npy_path)
-    #make_overwritefolder(frames_path)
-    #make_overwritefolder(result_video_path)
+    make_overwritefolder(UPLOAD_FOLDER)
+    make_overwritefolder(npy_path)
+    make_overwritefolder(frames_path)
+    make_overwritefolder(result_video_path)
         
     if request.method == 'GET': 
         return render_template('index.html')
