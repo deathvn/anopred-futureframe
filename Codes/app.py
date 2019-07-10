@@ -8,8 +8,12 @@ import time
 
 def make_overwritefolder(path):
     if os.path.exists(path):
-        shutil.rmtree('./' + path, ignore_errors=True)
-    os.makedirs(path)
+        files = os.listdir(path)
+        for file_name in files:
+            file_path = path + '/' + file_name;
+            os.remove(file_path)
+    else:
+        os.makedirs(path)
 
 UPLOAD_FOLDER = '../uploads/01'
 ALLOWED_EXTENSIONS = set(['jpg'])
@@ -17,10 +21,6 @@ frames_path = 'frames'
 mask_path = 'mask'
 plot_path = 'static/plot'
 result_video_path = 'static/videos'
-video_name = 'test' + str(time.time())
-out_video = result_video_path + '/' + video_name + '.mp4'
-
-make_video_script = 'ffmpeg -f image2 -r 20 -i ./frames/%06d.jpg -vcodec libx264 -acodec aac -y ' + out_video
 
 
 app = Flask(__name__)
@@ -29,6 +29,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER # upload file
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    
     #print (request.method)  
     make_overwritefolder(UPLOAD_FOLDER)
     make_overwritefolder(plot_path)
@@ -58,13 +59,17 @@ def home():
                 filename = secure_filename(_file.filename)
                 _file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         
+        video_name = dataset
+        out_video = result_video_path + '/' + video_name + '.mp4'
+        make_video_script = 'ffmpeg -f image2 -r 20 -i ./frames/%06d.jpg -vcodec libx264 -acodec aac -y ' + out_video
+        
         run_ano_script = 'python app_inference.py --dataset ' + dataset +' --test_folder ' + test_folder + ' --gpu 0 --snapshot_dir checkpoints/pretrains/'+pretrain
 
         os.system(run_ano_script)
         os.system(make_video_script)
 		
-        return render_template('result.html', video_path=out_video)
-    
-
+        list_plots = [ plot_path + '/' + i for i in os.listdir(plot_path)]
+        print ("list plot:", list_plots)
+        return render_template('result.html', video_path=out_video, list_plots=list_plots, dataset=dataset)
 if __name__ == '__main__':
     app.run()

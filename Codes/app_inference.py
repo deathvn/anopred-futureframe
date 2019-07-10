@@ -105,8 +105,7 @@ with tf.Session(config=config) as sess:
                                 feed_dict={test_video_clips_tensor: video_clip[np.newaxis, ...]})
                 psnrs[i] = psnr
 
-                print('video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(
-                    video_name, num_videos, i, length, psnr))
+                #print('video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(video_name, num_videos, i, length, psnr))
 
             psnrs[0:num_his] = psnrs[num_his]
             psnr_records.append(psnrs)
@@ -173,6 +172,15 @@ with tf.Session(config=config) as sess:
                 
                 it = it+1
                 
+            fig = plt.figure()
+            lw = 2
+            plt.plot(np.arange(4, length), dat[4:], color='darkorange', lw=lw)
+            plt.xlim([0, length])
+            plt.ylim([0.00, 1.00])
+            plt.xlabel('Frame')
+            plt.ylabel('Score')
+            plt.title('Video '+ new_video_name +' Score')
+            fig.savefig('static/plot/'+ new_video_name + '.png')    
             #np.save(save_npy_file, dat)
 
     def label_inference_func(ckpt, dataset_name, evaluate_name):
@@ -202,8 +210,7 @@ with tf.Session(config=config) as sess:
                 mask = mask.reshape(256, 256, 3)
                 np.save(mask_path + '{:06}'.format(it) + ".npy", mask)
 
-                print('video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(
-                    video_name, num_videos, i, length, psnr))
+                #print('video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(video_name, num_videos, i, length, psnr))
                     
                 it += 1
 
@@ -245,16 +252,15 @@ with tf.Session(config=config) as sess:
                 else:
                     k=1
                 testPredict[it] = k
-                print('videos = {} / {}, i = {} / {}, Scores = {:.6f}, -{} - {} '.format(
-                    video_name, num_videos, i, length, scores[it], 'Abnorm'if k==1 else 'Normal' , k))
+                print('videos = {} / {}, i = {} / {}, Scores = {:.6f}, -{} - {} '.format(video_name, num_videos, i, length, scores[it], 'Abnorm'if k==1 else 'Normal' , k))
                 
                 dat[i] = scores[it]
                 
                 # Make output video
                 img_path = inp_path + '/' + new_video_name + '/' + frames_list[i]
-                print ("img path:", img_path)
+                #print ("img path:", img_path)
                 frame_out = out_path + '{:06}'.format(it) + ".jpg"
-                print ("frames out:", frame_out)
+                #print ("frames out:", frame_out)
                 frame = cv2.imread(img_path)
                 H, W = frame.shape[:2]
                 
@@ -269,7 +275,7 @@ with tf.Session(config=config) as sess:
                 
                 it = it+1
             
-            print ("dat_shape", dat.shape)
+            #print ("dat_shape", dat.shape)
             fig = plt.figure()
             lw = 2
             plt.plot(np.arange(4, length), dat[4:], color='darkorange', lw=lw)
