@@ -129,4 +129,5 @@ Codes/*.sav
 Codes/*.npy
 Codes/frames/
 Codes/mask/
-COdes/static/plot/
+Codes/static/plot/
+Codes/static/my_graph_figure.png

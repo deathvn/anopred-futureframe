@@ -63,11 +63,11 @@ python inference.py  --dataset  ped1 \
 ```
 [ped1 outvideo](https://www.youtube.com/watch?v=sxYy1TH9c_A&list=PLaHlllAfhKRs9pCPTMCiReXmhJvJDdXTq&index=7)
 
-## 4. Training from scratch (here we use ped2 and avenue datasets for examples)
+## 4. Training from scratch
 * Download the pretrained FlowNet at first and see above mentioned step 3.1 
 * Set hyper-parameters
 The default hyper-parameters are all initialized in **training_hyper_params/hyper_params.ini**. 
-* Running script (as ped2 or avenue for instances) and cd into **Codes** folder at first.
+* cd into **Codes** folder at first. After that, run this script.
 ```shell
 python train.py  --dataset  ped2    \
                  --train_folder  ../Data/ped2/training/frames     \
@@ -76,7 +76,7 @@ python train.py  --dataset  ped2    \
                  --iters    80000
 ```
 * Model selection while training
-In order to do model selection, a popular way is to testing the saved models after a number of iterations or epochs (Since there are no validation set provided on above all datasets, and in order to compare the performance with other methods, we just choose the best model on testing set). Here, we can use another GPU to listen the **snapshot_dir** folder. When a new model.cpkt.xxx has arrived, then load the model and test. Finnaly, we choose the best model. Following is the script.
+To model selection, run this script.
 ```shell
 python inference.py  --dataset  ped2    \
                      --test_folder  ../Data/ped2/testing/frames       \
@@ -111,15 +111,6 @@ optional arguments:
   --psnr_dir PSNR_DIR  the directory to save psnrs results in testing.
   --evaluate EVALUATE  the evaluation metric, default is compute_auc
 ```
-* (Option) Tensorboard visualization
-```shell
-tensorboard    --logdir=./summary    --port=10086
-```
-Open the browser and type **https://ip:10086**. Following is the screen shot of avenue on tensorboard.
-![scalars_tensorboard](assets/scalars.JPG)
-
-![images_tensorboard](assets/images.JPG)
-Since the models are trained in cv2 BGR image color channels, the visualized images in tensorboard look different from RGB channels.
 
 ## Reference
 This project is referenced from [Future Frame Prediction for Anomaly Detection -- A New Baseline, CVPR 2018](https://arxiv.org/pdf/1712.09867.pdf) - by Wen Liu, Weixin Lluo, Dongze Lian and Shenghua Gao.  
