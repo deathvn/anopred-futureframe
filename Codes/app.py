@@ -6,6 +6,11 @@ import cv2
 import shutil
 import time
 
+def dir_last_updated(folder):
+    return str(max(os.path.getmtime(os.path.join(root_path, f))
+               for root_path, dirs, files in os.walk(folder)
+               for f in files))
+
 def make_overwritefolder(path):
     if os.path.exists(path):
         files = os.listdir(path)
@@ -70,7 +75,7 @@ def home():
 		
         list_plots = [ plot_path + '/' + i for i in os.listdir(plot_path)]
         print ("list plot:", list_plots)
-        return render_template('result.html', video_path=out_video, list_plots=list_plots, dataset=dataset)
+        return render_template('result.html', video_path=out_video, list_plots=list_plots, dataset=dataset, last_updated=dir_last_updated('static'))
     
     #list_plots = [ plot_path + '/' + i for i in os.listdir(plot_path)]
     #return render_template('result.html', video_path='static/videos/ped2.mp4', list_plots=list_plots, dataset='ped2')

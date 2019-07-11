@@ -92,7 +92,7 @@
 <div class="navbar"> <b>VIDEO OUTPUT</b> </div>
 <div class="video-zone">
 	<video class="output-video" controls>
-		<source src="{{ video_path }}" type='video/mp4'/>
+		<source src="{{ video_path + '?u=' + last_updated }}" type='video/mp4'/>
 		Your browser does not support the video tag.
 	</video>
 </div>
@@ -100,14 +100,14 @@
 <div class="navbar"> <b>SCORE GRAPHS</b> </div>
 <div class="plot-zone">
 	{% for i in list_plots %}
-		<image class="plot" src="{{ i }}">
+		<image class="plot" src="{{ i + '?u=' + last_updated }}">
 	{% endfor %}
 </div>
 
 {% if dataset!="upload" %}
 <div class="navbar"> <b>ROC CURVE GRAPH</b> </div>
 <div class="roc-zone">
-	<image class="roc" src="static/my_graph_figure.png">
+	<image class="roc" src="static/my_graph_figure.png?u={{ last_updated }}">
 </div>
 {% endif %}
 
