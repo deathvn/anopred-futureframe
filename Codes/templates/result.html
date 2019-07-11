@@ -31,13 +31,12 @@
 	.plot-zone {
 	  display: flex;
 	  flex-flow: row wrap;
-	  width: 80vw;
+	  width: 100%;
 	  margin: auto;
 	}
 	
 	.plot {
-	  width: 23%;
-	  padding: 1%;
+	  width: 25%;  
 	}
 
     .output-video {
@@ -67,13 +66,30 @@
       bottom: 0;
       width: 100%;
     }
-	
+
+    .navbar {
+      background-color: #1d2223;
+      position: -webkit-sticky; /* Safari */
+      position: sticky; /* Set the navbar to sticky position */
+      top: 0; /* Position the navbar at the top of the page */
+      width: 100%; /* Full width */
+      display: flex;
+      z-index: 1000;
+      justify-content: center;
+    }
+	.navbar b {
+      font-weight: 800;
+      color: #32FF32;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
   </style>
 </head>
 
 <body>
 <image class="img-ground" src="static/asset/result-image.jpg">
 
+<div class="navbar"> <b>VIDEO OUTPUT</b> </div>
 <div class="video-zone">
 	<video class="output-video" controls>
 		<source src="{{ video_path }}" type='video/mp4'/>
@@ -81,6 +97,7 @@
 	</video>
 </div>
 
+<div class="navbar"> <b>SCORE GRAPHS</b> </div>
 <div class="plot-zone">
 	{% for i in list_plots %}
 		<image class="plot" src="{{ i }}">
@@ -88,6 +105,7 @@
 </div>
 
 {% if dataset!="upload" %}
+<div class="navbar"> <b>ROC CURVE GRAPH</b> </div>
 <div class="roc-zone">
 	<image class="roc" src="static/my_graph_figure.png">
 </div>

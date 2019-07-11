@@ -278,7 +278,7 @@ with tf.Session(config=config) as sess:
             #print ("dat_shape", dat.shape)
             fig = plt.figure()
             lw = 2
-            plt.plot(np.arange(4, length), dat[4:], color='darkorange', lw=lw)
+            plt.plot(np.arange(4, length), dat[4:], color='green', lw=lw)
             plt.xlim([0, length])
             plt.ylim([0.00, 1.00])
             plt.xlabel('Frame')

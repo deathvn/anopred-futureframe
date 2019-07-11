@@ -71,5 +71,8 @@ def home():
         list_plots = [ plot_path + '/' + i for i in os.listdir(plot_path)]
         print ("list plot:", list_plots)
         return render_template('result.html', video_path=out_video, list_plots=list_plots, dataset=dataset)
+    
+    #list_plots = [ plot_path + '/' + i for i in os.listdir(plot_path)]
+    #return render_template('result.html', video_path='static/videos/ped2.mp4', list_plots=list_plots, dataset='ped2')
 if __name__ == '__main__':
     app.run()
