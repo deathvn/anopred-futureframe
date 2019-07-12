@@ -112,6 +112,18 @@ optional arguments:
   --evaluate EVALUATE  the evaluation metric, default is compute_auc
 ```
 
+## 5. Web demo application
+![webdemo](assets/homedemo.png)
+Install flask-ngrok to run the web demo application
+```shell
+pip install flask-ngrok
+```
+After install flask framework, cd to Codes folder, and run the web application by this script:
+```shell
+cd Codes
+python app.py
+```
+Feel confuse with environments, or don't want to install anything, check our [colab work here](https://colab.research.google.com/drive/1wkpxYdcxFSrX0T45haedTnis0ROed9bb)!
 ## Reference
 This project is referenced from [Future Frame Prediction for Anomaly Detection -- A New Baseline, CVPR 2018](https://arxiv.org/pdf/1712.09867.pdf) - by Wen Liu, Weixin Lluo, Dongze Lian and Shenghua Gao.  
 Thanks for [their nice work](https://github.com/StevenLiuWen/ano_pred_cvpr2018.git)!
