@@ -5,8 +5,8 @@ Check our [colap work](https://colab.research.google.com/drive/1wkpxYdcxFSrX0T45
 - TRẦN KHẢ PHIÊU  15520614  
 ![abnormal detection](assets/cover.JPG)
 
-## 1. Installation (Anaconda with python3 installation)
-* Install 3rd-package dependencies of python (listed in requirements.txt)
+## 1. Installation
+* Install 3rd-package dependencies of python
 ```
 numpy==1.14.1
 scipy==1.0.0
@@ -23,18 +23,18 @@ opencv-python==3.2.0.6
 CUDA 8.0
 Cudnn 6.0
 ```
-## 2. Download datasets
-cd into Data folder of project and run the this scripts for **ped1** and **ped2** data.
+## 2. Datasets
+cd into **Data** folder of project and run the this scripts for **ped1** and **ped2** data.
 ```shell
 cd Data
 git clone https://github.com/deathvn/ped2
 git clone https://github.com/deathvn/ped1
 ```
 or You can download all datasets from [ped1.tar.gz, ped2.tar.gz, avenue.tar.gz and shanghaitech.tar.gz](https://onedrive.live.com/?authkey=%21AMqh2fTSemfrokE&id=3705E349C336415F%215109&cid=3705E349C336415F)
-and tar each tar.gz file, and move them in to **Data** folder.
+and extract each file, and move them in to **Data** folder.
 
-## 3. Testing on saved models
-* Download the trained models (There are the pretrained FlowNet and the trained models of the papers, such as ped1, ped2 and avenue).
+## 3. Testing
+* Download the pre-train models.
 ```shell
 cd checkpoints
 git clone https://github.com/deathvn/pretrains
@@ -47,7 +47,7 @@ Download pretrain models and move them to **pretrain** folder
 [Avenue](http://download937.mediafire.com/xf5vl5dav6ag/mi9d2annamyh4bz/avenue.data-00000-of-00001)  
 [Shanghaitech](http://download1649.mediafire.com/s0qjqln1qfqg/60za9d7exgv90ld/shanghaitech.data-00000-of-00001)  
 
-* Running the sript (as ped2 and ped1 datasets for examples) and cd into **Codes** folder at first.
+* cd into **Codes** folder, after that running the scripts for test.
 ```shell
 python inference.py  --dataset  ped2    \
                      --test_folder  ../Data/ped2/testing/frames      \
@@ -63,11 +63,9 @@ python inference.py  --dataset  ped1 \
 ```
 [ped1 outvideo](https://www.youtube.com/watch?v=sxYy1TH9c_A&list=PLaHlllAfhKRs9pCPTMCiReXmhJvJDdXTq&index=7)
 
-## 4. Training from scratch
-* Download the pretrained FlowNet at first and see above mentioned step 3.1 
-* Set hyper-parameters
-The default hyper-parameters are all initialized in **training_hyper_params/hyper_params.ini**. 
-* cd into **Codes** folder at first. After that, run this script.
+## 4. Training
+* Set hyper-parameters in **training_hyper_params/hyper_params.ini**. 
+* cd into **Codes** folder, After that, run this script.
 ```shell
 python train.py  --dataset  ped2    \
                  --train_folder  ../Data/ped2/training/frames     \
@@ -118,7 +116,7 @@ Install flask-ngrok to run the web demo application
 ```shell
 pip install flask-ngrok
 ```
-After install flask framework, cd to Codes folder, and run the web application by this script:
+After install flask framework, cd to **Codes** folder, and run the web application by this script:
 ```shell
 cd Codes
 python app.py
