@@ -46,6 +46,13 @@ def image2_bin(img):
     new_image[new_image<avg_val]=0
     return new_image
 
+def apply_mask(img, mask):
+    h, w = mask.shape[:2]
+    for i in range(h):
+        for j in range(w):
+            if (mask[i][j] != 0):
+                img[i][j] = (0, mask[i][j], mask[i][j])
+    return img
 
 # define dataset
 with tf.name_scope('dataset'):
@@ -167,7 +174,8 @@ with tf.Session(config=config) as sess:
                 
                 if k==1:
                     cv2.rectangle(frame, (0,0), (W, H), (0, 0, 255), thickness=5, lineType=8, shift=0)
-                    frame[l_val!=0] = (0,255,255)
+                    #frame[l_val!=0] = (0,255,255)
+                    frame = apply_mask(frame, l_val)
                 cv2.imwrite(frame_out, frame)
                 
                 it = it+1
