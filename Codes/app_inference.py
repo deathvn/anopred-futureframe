@@ -253,7 +253,7 @@ with tf.Session(config=config) as sess:
             length = video['length']
             new_video_name = video_name.split('\\')[-1]
             
-            save_npy_file = 'npy/' + new_video_name + '.npy'
+            #save_npy_file = 'npy/' + new_video_name + '.npy'
             dat = np.zeros(length)
             
             frames_list = os.listdir(inp_path + '/' + new_video_name)
