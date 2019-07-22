@@ -292,6 +292,7 @@ with tf.Session(config=config) as sess:
 
                 #frame = cv2.imread(img_path)
                 frame = frames_list[it]
+                print ("frame_shape:", frame.shape)
                 frame = cv2.resize(frame, (W, H))
 
                 #H, W = frame.shape[:2]
