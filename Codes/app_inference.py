@@ -149,6 +149,7 @@ with tf.Session(config=config) as sess:
             dat = np.zeros(length)
             
             frames_list = os.listdir(inp_path + '/' + new_video_name)
+            frames_list.sort()
             for i in range(num_his, length):
                 if scores[it] >= thres:
                     k=0
