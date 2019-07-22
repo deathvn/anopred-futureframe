@@ -51,7 +51,7 @@ def apply_mask(img, mask):
     for i in range(h):
         for j in range(w):
             if (mask[i][j] != 0):
-                img[i][j] = (0, mask[i][j], mask[i][j])
+                img[i][j] = (1-mask[i][j]) * img[i][j] + mask[i][j] * (0, 255, 255)
     return img
 
 # define dataset
