@@ -73,9 +73,9 @@ with tf.variable_scope('generator', reuse=None):
     test_outputs = generator(test_inputs, layers=4, output_channel=3)
     print ("test_outputs: ",test_outputs)
     test_psnr_error = psnr_error(gen_frames=test_outputs, gt_frames=test_gt)
-    truth = test_gt
     loss_val = tf.abs((test_outputs - test_gt)*255)
-    psnr_and_mask = test_psnr_error, loss_val
+    truth = test_gt*255
+    psnr_and_mask_and_truth = test_psnr_error, loss_val, truth
 
 
 config = tf.ConfigProto()
@@ -206,6 +206,7 @@ with tf.Session(config=config) as sess:
 
         mask_path = 'mask/'
         mask_list = []
+        frames_list = []
         
         it = 0
         for video_name, video in videos_info.items():
@@ -215,13 +216,17 @@ with tf.Session(config=config) as sess:
 
             for i in range(num_his, length):
                 video_clip = data_loader.get_video_clips(video_name, i - num_his, i + 1)
-                psnr, mask = sess.run(psnr_and_mask,
+                psnr, mask, truth = sess.run(psnr_and_mask_and_truth,
                                 feed_dict={test_video_clips_tensor: video_clip[np.newaxis, ...]})
                 psnrs[i] = psnr
                 
                 mask = np.uint8(mask)                
                 mask = mask.reshape(256, 256, 3)
                 mask_list.append(mask)
+
+                truth = np.uint8(truth)                
+                truth = truth.reshape(256, 256, 3)
+                frames_list.append(truth)
                 #np.save(mask_path + '{:06}'.format(it) + ".npy", mask)
 
                 print('video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(video_name, num_videos, i, length, psnr))
@@ -267,7 +272,6 @@ with tf.Session(config=config) as sess:
             #frames_list = os.listdir(inp_path + '/' + new_video_name)
             #frames_list.sort()
             for i in range(num_his, length):
-                video_clip = data_loader.get_video_clips(video_name, i - num_his, i + 1)
 
                 if scores[it] >= thres:
                     k=0
@@ -287,9 +291,9 @@ with tf.Session(config=config) as sess:
                 #print ("frames out:", frame_out)
 
                 #frame = cv2.imread(img_path)
-                frame = np.uint8 (video_clip[i])
-                frame = frame.reshape(256, 256, 3)
+                frame = frames_list[it]
                 frame = cv2.resize(frame, (W, H))
+
                 #H, W = frame.shape[:2]
                 
                 #l_val = np.load(mask_path + mask_list[it])               
