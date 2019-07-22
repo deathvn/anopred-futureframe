@@ -54,7 +54,8 @@ def apply_mask(img, mask):
                 alpha = mask[i][j]//255
                 print ("alpha:", alpha)
                 print ("img[i][j]:", img[i][j])
-                img[i][j] = (1-alpha) * img[i][j] + alpha * (0, 255, 255)
+                #img[i][j] = (1-alpha) * img[i][j] + alpha * (0, 255, 255)
+                img[i][j] = (0, 255, 255)
     return img
 
 # define dataset
