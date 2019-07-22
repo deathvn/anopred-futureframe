@@ -52,7 +52,8 @@ def apply_mask(img, mask):
         for j in range(w):
             if (mask[i][j] != 0):
                 alpha = np.float32 ( mask[i][j]/255 )
-                img[i][j] = np.uint8 ( (1-alpha) * img[i][j] + alpha * (0, 255, 255) )
+                new_color = np.uint8 ( [(1-alpha) * img[i][j][0] + alpha * 0, (1-alpha) * img[i][j][1] + alpha * 255, (1-alpha) * img[i][j][2] + alpha * 255 ] )
+                img[i][j] = new_color
                 #img[i][j] = (0, 255, 255)
     return img
 
