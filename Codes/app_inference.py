@@ -74,7 +74,7 @@ with tf.variable_scope('generator', reuse=None):
     print ("test_outputs: ",test_outputs)
     test_psnr_error = psnr_error(gen_frames=test_outputs, gt_frames=test_gt)
     loss_val = tf.abs((test_outputs - test_gt)*255)
-    truth = test_gt*255
+    truth = tf.abs(test_gt*255)
     psnr_and_mask_and_truth = test_psnr_error, loss_val, truth
 
 
