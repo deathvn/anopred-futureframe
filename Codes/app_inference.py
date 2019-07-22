@@ -114,7 +114,7 @@ with tf.Session(config=config) as sess:
                                 feed_dict={test_video_clips_tensor: video_clip[np.newaxis, ...]})
                 psnrs[i] = psnr
 
-                #print('video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(video_name, num_videos, i, length, psnr))
+                print('video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(video_name, num_videos, i, length, psnr))
 
             psnrs[0:num_his] = psnrs[num_his]
             psnr_records.append(psnrs)
@@ -148,6 +148,7 @@ with tf.Session(config=config) as sess:
             dat = np.zeros(length)
             
             frames_list = os.listdir(inp_path + '/' + new_video_name)
+            frames_list.sort()
             for i in range(num_his, length):
                 if scores[it] >= thres:
                     k=0
@@ -161,7 +162,7 @@ with tf.Session(config=config) as sess:
                 
                 # Make output video
                 img_path = inp_path + '/' + new_video_name + '/' + frames_list[i]
-                print ("img paht:", img_path)
+                print ("img path:", img_path)
                 frame_out = out_path + '{:06}'.format(it) + ".jpg"
                 print ("frames out:", frame_out)
                 frame = cv2.imread(img_path)
@@ -222,7 +223,7 @@ with tf.Session(config=config) as sess:
                 mask_list.append(mask)
                 #np.save(mask_path + '{:06}'.format(it) + ".npy", mask)
 
-                #print('video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(video_name, num_videos, i, length, psnr))
+                print('video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(video_name, num_videos, i, length, psnr))
                     
                 it += 1
 
