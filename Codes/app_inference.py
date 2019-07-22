@@ -252,6 +252,10 @@ with tf.Session(config=config) as sess:
         #mask_list = os.listdir(mask_path)
         #mask_list.sort()
         
+        sample_image_name = os.listdir(inp_path + '/01')[0]
+        sample_image = cv2.imread(inp_path + '/01/' + sample_image_name)
+        H, W = sample_image[:2]
+
         for video_name, video in videos_info.items():
             
             length = video['length']
@@ -260,9 +264,11 @@ with tf.Session(config=config) as sess:
             #save_npy_file = 'npy/' + new_video_name + '.npy'
             dat = np.zeros(length)
             
-            frames_list = os.listdir(inp_path + '/' + new_video_name)
-            frames_list.sort()
+            #frames_list = os.listdir(inp_path + '/' + new_video_name)
+            #frames_list.sort()
             for i in range(num_his, length):
+                video_clip = data_loader.get_video_clips(video_name, i - num_his, i + 1)
+
                 if scores[it] >= thres:
                     k=0
                 else:
@@ -273,12 +279,17 @@ with tf.Session(config=config) as sess:
                 dat[i] = scores[it]
                 
                 # Make output video
-                img_path = inp_path + '/' + new_video_name + '/' + frames_list[i]
+
+                #img_path = inp_path + '/' + new_video_name + '/' + frames_list[i]
+
                 #print ("img path:", img_path)
                 frame_out = out_path + '{:06}'.format(it) + ".jpg"
                 #print ("frames out:", frame_out)
-                frame = cv2.imread(img_path)
-                H, W = frame.shape[:2]
+
+                #frame = cv2.imread(img_path)
+                frame = video_clip[i]
+                frame = cv2.resize(frame, (W, H))
+                #H, W = frame.shape[:2]
                 
                 #l_val = np.load(mask_path + mask_list[it])               
                 l_val = mask_list[it]
