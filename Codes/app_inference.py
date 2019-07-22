@@ -219,7 +219,8 @@ with tf.Session(config=config) as sess:
                 psnr, mask, truth = sess.run(psnr_and_mask_and_truth,
                                 feed_dict={test_video_clips_tensor: video_clip[np.newaxis, ...]})
                 psnrs[i] = psnr
-                
+                print ("psnr:",psnr)
+
                 mask = np.uint8(mask)                
                 mask = mask.reshape(256, 256, 3)
                 mask_list.append(mask)
