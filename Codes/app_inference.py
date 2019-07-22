@@ -287,7 +287,8 @@ with tf.Session(config=config) as sess:
                 #print ("frames out:", frame_out)
 
                 #frame = cv2.imread(img_path)
-                frame = video_clip[i]
+                frame = np.uint8 (video_clip[i])
+                frame = frame.reshape(256, 256, 3)
                 frame = cv2.resize(frame, (W, H))
                 #H, W = frame.shape[:2]
                 
