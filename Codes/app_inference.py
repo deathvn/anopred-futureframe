@@ -51,7 +51,7 @@ def apply_mask(img, mask):
     for i in range(h):
         for j in range(w):
             if (mask[i][j] != 0):
-                alpha = np.float32(0.5*(mask[i][j]/255))
+                alpha = mask[i][j]/255
                 img[i][j] = (1-alpha) * img[i][j] + alpha * (0, 255, 255)
                 #img[i][j] = (0, 255, 255)
     return img
