@@ -52,6 +52,8 @@ def apply_mask(img, mask):
         for j in range(w):
             if (mask[i][j] != 0):
                 alpha = mask[i][j]//255
+                print ("alpha:", alpha)
+                print ("img[i][j]:", img[i][j])
                 img[i][j] = (1-alpha) * img[i][j] + alpha * (0, 255, 255)
     return img
 
