@@ -201,6 +201,7 @@ with tf.Session(config=config) as sess:
         timestamp = time.time()
 
         mask_path = 'mask/'
+        mask_list = []
         
         it = 0
         for video_name, video in videos_info.items():
@@ -216,7 +217,8 @@ with tf.Session(config=config) as sess:
                 
                 mask = np.uint8(mask)                
                 mask = mask.reshape(256, 256, 3)
-                np.save(mask_path + '{:06}'.format(it) + ".npy", mask)
+                mask_list.append(mask)
+                #np.save(mask_path + '{:06}'.format(it) + ".npy", mask)
 
                 #print('video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(video_name, num_videos, i, length, psnr))
                     
@@ -243,8 +245,8 @@ with tf.Session(config=config) as sess:
         it = 0
         testPredict = np.zeros(scores.shape, dtype=int)
         #thres = 0.6
-        mask_list = os.listdir(mask_path)
-        mask_list.sort()
+        #mask_list = os.listdir(mask_path)
+        #mask_list.sort()
         
         for video_name, video in videos_info.items():
             
@@ -274,7 +276,8 @@ with tf.Session(config=config) as sess:
                 frame = cv2.imread(img_path)
                 H, W = frame.shape[:2]
                 
-                l_val = np.load(mask_path + mask_list[it])               
+                #l_val = np.load(mask_path + mask_list[it])               
+                l_val = mask_list[it]
                 l_val = cv2.resize(l_val, (W,H))
                 l_val = image2_bin(l_val)
                 
