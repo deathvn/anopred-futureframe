@@ -1,5 +1,5 @@
 # Future Frame Prediction for Anomaly Detection -- Phát hiện bất thường trong video bằng Dự đoán khung hình
-This repo is the source of our thesis, implemented in python tensorflow. [Demovideo](https://www.youtube.com/watch?v=5g9gU0_JiKU&list=PLaHlllAfhKRs9pCPTMCiReXmhJvJDdXTq&index=5)  
+This repo is the source of our thesis, implemented in python tensorflow. [Demovideo](https://www.youtube.com/playlist?list=PLaHlllAfhKRsJYn3j9s60Oi1mA8FbxhQS)  
 Check our [colap work](https://colab.research.google.com/drive/1wkpxYdcxFSrX0T45haedTnis0ROed9bb)  
 - VŨ LÊ HOÀNG MINH  15520498  
 - TRẦN KHẢ PHIÊU  15520614  
@@ -30,8 +30,7 @@ cd Data
 git clone https://github.com/deathvn/ped2
 git clone https://github.com/deathvn/ped1
 ```
-or You can download all datasets from [ped1.tar.gz, ped2.tar.gz, avenue.tar.gz and shanghaitech.tar.gz](https://onedrive.live.com/?authkey=%21AMqh2fTSemfrokE&id=3705E349C336415F%215109&cid=3705E349C336415F)
-and extract each file, and move them in to **Data** folder.
+You also can download [Avenue](http://www.mediafire.com/file/o3op3dhb3uoosxj/avenue.zip/file) and [ShanghaiTech](http://www.mediafire.com/file/qskm7w88lqrhfuc/shanghaitech.zip/file), after that extract to **Data** folder.
 
 ## 3. Testing
 * Download the pre-train models.
@@ -41,11 +40,11 @@ git clone https://github.com/deathvn/pretrains
 cd pretrains
 ```
 Download pretrain models and move them to **pretrain** folder  
-[Flownet_file1](http://download943.mediafire.com/hynmczvscd4g/gfpe28rfs4tptm1/flownet-SD.ckpt-0.data-00000-of-00001), [Flownet_file2](http://download1525.mediafire.com/1l504kua1zqg/feur15guonc09ul/flownet-SD.ckpt-0.meta)  
-[Ped1](http://download843.mediafire.com/4r7jgo7jaebg/vj1nsd622vju6qx/ped1.data-00000-of-00001)  
-[Ped2](http://download855.mediafire.com/4s8db04z901g/l241oo8msf1lg6o/ped2.data-00000-of-00001)  
-[Avenue](http://download937.mediafire.com/xf5vl5dav6ag/mi9d2annamyh4bz/avenue.data-00000-of-00001)  
-[Shanghaitech](http://download1649.mediafire.com/s0qjqln1qfqg/60za9d7exgv90ld/shanghaitech.data-00000-of-00001)  
+[Flownet_file1](http://www.mediafire.com/file/gfpe28rfs4tptm1/flownet-SD.ckpt-0.data-00000-of-00001/file), [Flownet_file2](http://www.mediafire.com/file/feur15guonc09ul/flownet-SD.ckpt-0.meta/file)  
+[Ped1](http://www.mediafire.com/file/vj1nsd622vju6qx/ped1.data-00000-of-00001/file)  
+[Ped2](http://www.mediafire.com/file/l241oo8msf1lg6o/ped2.data-00000-of-00001/file)  
+[Avenue](http://www.mediafire.com/file/mi9d2annamyh4bz/avenue.data-00000-of-00001/file)  
+[Shanghaitech](http://www.mediafire.com/file/60za9d7exgv90ld/shanghaitech.data-00000-of-00001/file)  
 
 * cd into **Codes** folder, after that running the scripts for test.
 ```shell
@@ -54,14 +53,37 @@ python inference.py  --dataset  ped2    \
                      --gpu  0    \
                      --snapshot_dir    checkpoints/pretrains/ped2
 ```
-[ped2 outvideo](https://www.youtube.com/watch?v=4Bfr0_MS1Vc&list=PLaHlllAfhKRs9pCPTMCiReXmhJvJDdXTq&index=6)
+[ped2 outvideo](https://youtu.be/zi8aNOG8olU)
 ```shell
 python inference.py  --dataset  ped1 \
                      --test_folder  ../Data/ped1/testing/frames      \
                      --gpu  0    \
                      --snapshot_dir    checkpoints/pretrains/ped1
 ```
-[ped1 outvideo](https://www.youtube.com/watch?v=sxYy1TH9c_A&list=PLaHlllAfhKRs9pCPTMCiReXmhJvJDdXTq&index=7)
+[ped1 outvideo](https://youtu.be/9o1mnPE1Iqw)
+```shell
+python inference.py  --dataset  avenue \
+                     --test_folder  ../Data/avenue/testing/frames      \
+                     --gpu  0    \
+                     --snapshot_dir    checkpoints/pretrains/avenue
+```
+[avenue outvideo](https://youtu.be/aks5hEveyGk)
+```shell
+python inference.py  --dataset  shanghaitech \
+                     --test_folder  ../Data/shanghaitech/testing/frames      \
+                     --gpu  0    \
+                     --snapshot_dir    checkpoints/pretrains/shanghaitech
+```
+[shanghaitech outvideo](https://youtu.be/kgXThRTjrSw)
+
+### [optional] testing with UIT-dataset
+```shell
+python inference.py  --dataset  uit \
+                     --test_folder  ../Data/uit/testing/frames      \
+                     --gpu  0    \
+                     --snapshot_dir    checkpoints/pretrains/uit
+```
+[uit outvideo](https://youtu.be/r46tGPYOS8E)
 
 ## 4. Training
 * Set hyper-parameters in **training_hyper_params/hyper_params.ini**. 
