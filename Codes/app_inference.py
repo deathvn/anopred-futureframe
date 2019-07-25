@@ -260,6 +260,7 @@ with tf.Session(config=config) as sess:
         sample_img = cv2.imread(inp_path + '/' + '01' + '/' + frames_list[0])
         H, W = sample_img.shape[:2]
 
+        timestamp = time.time()
         for video_name, video in videos_info.items():
             
             length = video['length']
