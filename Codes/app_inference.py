@@ -68,7 +68,7 @@ def apply_mask(img, mask):
 
     mask = mask/255    
 
-    img = (1-mask) * img + mask * (0, 255, 255)
+    img = (1-mask) * img + mask * yellow
 
     '''
     for i in range(h):
