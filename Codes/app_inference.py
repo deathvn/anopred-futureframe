@@ -295,7 +295,7 @@ with tf.Session(config=config) as sess:
                 #l_val = np.load(mask_path + mask_list[it])               
                 l_val = mask_list[it]
                 l_val = cv2.resize(l_val, (W,H))
-                l_val = image2_bin(l_val)
+                #l_val = image2_bin(l_val)
                 
                 if k==1:
                     cv2.rectangle(frame, (0,0), (W, H), (0, 0, 255), thickness=5, lineType=8, shift=0)
