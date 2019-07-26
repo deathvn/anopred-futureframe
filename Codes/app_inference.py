@@ -61,13 +61,16 @@ def apply_mask(img, mask):
     
     #img[mask!=0] = (1-mask) * img + mask * (0, 255, 255)
 
-    
+    '''
     for i in range(h):
         for j in range(w):
             if (mask[i][j] != 0):
                 alpha = np.float32 ( mask[i][j]/255 )
                 new_color = [(1-alpha) * img[i][j][0] + alpha * 0, (1-alpha) * img[i][j][1] + alpha * 255, (1-alpha) * img[i][j][2] + alpha * 255]
                 img[i][j] = np.uint8 ( new_color )
+    '''
+    
+    img = (1-mask)*img + mask*np.uint8(0, 255, 255)
     
     #img = img.reshape(h, w, 3)
     return img
