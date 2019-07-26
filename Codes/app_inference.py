@@ -305,14 +305,14 @@ with tf.Session(config=config) as sess:
                 dat[i] = scores[it]
                 
                 # Make output video
-                #img_path = inp_path + '/' + new_video_name + '/' + frames_list[i]
+                img_path = inp_path + '/' + new_video_name + '/' + frames_list[i]
                 #print ("img path:", img_path)
                 frame_out = out_path + '{:06}'.format(it) + ".jpg"
-                #print ("frames out:", frame_out)
-                #frame = cv2.imread(img_path)
-                #H, W = frame.shape[:2]
-                frame = truth_list[it]
-                frame = cv2.resize(frame, (W, H))
+                print ("frames out:", frame_out)
+                frame = cv2.imread(img_path)
+                H, W = frame.shape[:2]
+                #frame = truth_list[it]
+                #frame = cv2.resize(frame, (W, H))
                 
                 #l_val = np.load(mask_path + mask_list[it])               
                 l_val = mask_list[it]
