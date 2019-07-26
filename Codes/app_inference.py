@@ -321,7 +321,7 @@ with tf.Session(config=config) as sess:
         end_time2 = time.time()
         used_time2 = end_time2 - timestamp2
         print ("stamp2:", timestamp2, "- end_time2:", end_time2)
-        print('total time = {}, fps = {}'.format(used_time, total / used_time))
+        print('total time = {}, fps = {}'.format(used_time2, total / used_time2))
     if dataset_name=='upload':
         inference_func(snapshot_dir, dataset_name, evaluate_name)
     else:
