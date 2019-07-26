@@ -33,7 +33,7 @@ print("This is const = ", const)
 def image2_bin(img):
     #new_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     new_image = img
-    new_image[new_image<30] = 0
+    #new_image[new_image<30] = 0
     Sum = 0
     count = 0
     for im_col in new_image:
@@ -75,6 +75,7 @@ with tf.variable_scope('generator', reuse=None):
     test_psnr_error = psnr_error(gen_frames=test_outputs, gt_frames=test_gt)
     truth = test_gt*255
     loss_val = tf.reduce_mean(tf.abs((test_outputs - test_gt)*255), axis=3, keep_dims=True)
+    loss_val[loss_val<30] = 0
     psnr_and_mask = test_psnr_error, loss_val, truth
 
 
