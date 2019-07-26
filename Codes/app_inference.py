@@ -31,7 +31,7 @@ evaluate_name = const.EVALUATE
 print("This is const = ", const)
 
 def image2_bin(img):
-    new_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    #new_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     new_image[new_image<30] = 0
     Sum = 0
     count = 0
@@ -171,7 +171,7 @@ with tf.Session(config=config) as sess:
                 video_clip = data_loader.get_video_clips(video_name, i - num_his, i + 1)
                 l_val = sess.run(loss_val, feed_dict={test_video_clips_tensor: video_clip[np.newaxis, ...]})
                 l_val = np.uint8(l_val)                
-                l_val = l_val.reshape(256, 256, 1)                
+                l_val = l_val.reshape(256, 256, 3)                
                 l_val = cv2.resize(l_val, (W,H))
                 l_val = image2_bin(l_val)
                 
@@ -220,7 +220,7 @@ with tf.Session(config=config) as sess:
                 psnrs[i] = psnr
                 
                 mask = np.uint8(mask)                
-                mask = mask.reshape(256, 256, 3)
+                mask = mask.reshape(256, 256, 1)
                 mask_list.append(mask)
                 #np.save(mask_path + '{:06}'.format(it) + ".npy", mask)
                 truth = np.uint8(truth)
