@@ -234,7 +234,9 @@ with tf.Session(config=config) as sess:
             psnrs[0:num_his] = psnrs[num_his]
             psnr_records.append(psnrs)
 
-        used_time = time.time() - timestamp
+        end_time1 = time.time()
+        used_time = end_time1 - timestamp
+        print ("stamp1:", timestamp, "- end_time1", end_time1)
         print('total time = {}, fps = {}'.format(used_time, total / used_time))
         result_dict = {'dataset': dataset_name, 'psnr': psnr_records, 'flow': [], 'names': [], 'diff_mask': []}
         # TODO specify what's the actual name of ckpt.
@@ -316,7 +318,9 @@ with tf.Session(config=config) as sess:
             plt.title('Video '+ new_video_name +' Score')
             fig.savefig('static/plot/'+ new_video_name + '.png')
             #np.save(save_npy_file, dat)
-        used_time2 = time.time() - timestamp2
+        end_time2 = time.time()
+        used_time2 = end_time2 - timestamp2
+        print ("stamp2:", stamp2, "- end_time2:", end_time2)
         print('total time = {}, fps = {}'.format(used_time, total / used_time))
     if dataset_name=='upload':
         inference_func(snapshot_dir, dataset_name, evaluate_name)
