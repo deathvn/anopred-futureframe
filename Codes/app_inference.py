@@ -79,7 +79,7 @@ def apply_mask(img, mask):
                 img[i][j] = np.uint8 ( new_color )
     '''
     
-    img = (1-mask)*img + mask*np.uint8(0, 255, 255)
+    #img = (1-mask)*img + mask*np.uint8(0, 255, 255)
     
     #img = img.reshape(h, w, 3)
     return img
