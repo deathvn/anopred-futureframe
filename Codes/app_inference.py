@@ -227,6 +227,7 @@ with tf.Session(config=config) as sess:
                 
                 mask = np.uint8(mask)                
                 mask = mask.reshape(256, 256, 1)
+                mask = image2_bin(mask)
                 mask_list.append(mask)
                 #np.save(mask_path + '{:06}'.format(it) + ".npy", mask)
                 truth = np.uint8(truth)
@@ -303,7 +304,7 @@ with tf.Session(config=config) as sess:
                 #l_val = np.load(mask_path + mask_list[it])               
                 l_val = mask_list[it]
                 l_val = cv2.resize(l_val, (W,H))
-                l_val = image2_bin(l_val)
+                #l_val = image2_bin(l_val)
                 
                 if k==1:
                     cv2.rectangle(frame, (0,0), (W, H), (0, 0, 255), thickness=5, lineType=8, shift=0)
