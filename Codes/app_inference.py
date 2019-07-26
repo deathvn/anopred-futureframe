@@ -54,7 +54,7 @@ def image2_bin(img):
     return new_image
 
 def apply_mask(img, mask):
-    h, w = mask.shape[:2]
+    h, w = img.shape[:2]
 
     #img = img.flatten()
     #mask = mask.flatten()
