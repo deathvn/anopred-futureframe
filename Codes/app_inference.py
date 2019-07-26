@@ -37,7 +37,7 @@ def image2_bin(img):
 
     avg_val = np.mean(new_image[new_image!=0])
     
-    new_image[new_image < mean] = 0
+    new_image[new_image < avg_val] = 0
     '''    
     Sum = 0
     count = 0
