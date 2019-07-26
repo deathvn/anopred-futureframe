@@ -59,7 +59,9 @@ def apply_mask(img, mask):
     #img = img.flatten()
     #mask = mask.flatten()
     
-    #img[mask!=0] = (1-mask) * img + mask * (0, 255, 255)
+    mask = mask/255    
+
+    img[mask!=0] = (1-mask) * img + mask * (0, 255, 255)
 
     '''
     for i in range(h):
