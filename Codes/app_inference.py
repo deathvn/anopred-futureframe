@@ -56,7 +56,7 @@ def image2_bin(img):
 def apply_mask(img, mask):
     h, w = mask.shape[:2]
     img = img.flatten()
-    mask = mask.flaetten()
+    mask = mask.flatten()
     
     img[mask!=0] = (1-mask) * img + mask * (0, 255, 255)
 
