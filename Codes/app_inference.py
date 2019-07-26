@@ -34,6 +34,7 @@ def image2_bin(img):
     #new_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     new_image = img
     #new_image[new_image<30] = 0
+    '''    
     Sum = 0
     count = 0
     for im_col in new_image:
@@ -45,6 +46,7 @@ def image2_bin(img):
         return new_image
     avg_val = Sum//count
     new_image[new_image<avg_val]=0
+    '''
     return new_image
 
 def apply_mask(img, mask):
@@ -76,6 +78,8 @@ with tf.variable_scope('generator', reuse=None):
     truth = test_gt*255
     loss_val = tf.reduce_mean(tf.abs((test_outputs - test_gt)*255), axis=3, keep_dims=True)
     loss_val[loss_val<30] = 0
+    mean = tf.reduce_mean(loss_val)
+    loss_val[loss_val<mean] = 0
     psnr_and_mask = test_psnr_error, loss_val, truth
 
 
