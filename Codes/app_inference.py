@@ -68,10 +68,10 @@ def apply_mask(img, mask):
     mask = cv2.cvtColor(mask,cv2.COLOR_GRAY2RGB)
 
     
-    #mask = mask/255    
+    mask = mask/255    
 
-    #img = (1-0.5) * img + 0.5 * yellow
-    img = mask
+    img = (1-mask) * img + mask * yellow
+    #img = mask
 
     '''
     for i in range(h):
