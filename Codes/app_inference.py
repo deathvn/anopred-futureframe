@@ -58,6 +58,8 @@ def apply_mask(img, mask):
 
     #img = img.flatten()
     #mask = mask.flatten()
+    mask = [mask, mask, mask]
+    mask = mask.reshape(h, w, 3)
     
     mask = mask/255    
 
