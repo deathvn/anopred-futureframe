@@ -73,7 +73,7 @@ with tf.variable_scope('generator', reuse=None):
     print ("test_outputs: ",test_outputs)
     test_psnr_error = psnr_error(gen_frames=test_outputs, gt_frames=test_gt)
     truth = test_gt*255
-    loss_val = tf.abs((test_outputs - test_gt)*255)
+    loss_val = tf.reduce_mean(tf.abs((test_outputs - test_gt)*255), axis=3, keep_dims=True)
     psnr_and_mask = test_psnr_error, loss_val, truth
 
 
