@@ -65,8 +65,9 @@ def apply_mask(img, mask):
     yellow[..., 1] = 255
     yellow[..., 2] = 255
 
-    mask = np.uint8([mask]*3)
-    mask = mask.reshape(h, w, 3)
+    new_mask = np.zeros((h,w,3), dtype='uint8')
+
+    new_mask[..., :] = mask
     #mask = mask/255    
 
     #img = (1-0.5) * img + 0.5 * yellow
