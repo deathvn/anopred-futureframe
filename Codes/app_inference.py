@@ -32,6 +32,7 @@ print("This is const = ", const)
 
 def image2_bin(img):
     #new_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    new_image = img
     new_image[new_image<30] = 0
     Sum = 0
     count = 0
