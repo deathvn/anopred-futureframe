@@ -11,11 +11,21 @@
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
     }
+    #loading {
+      width: 35px;
+      height: 35px;
+      display: block;
+      cursor: wait;
+    }
+    #content {
+      display: none;
+    }
     .loadding-screen {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vh;
+      z-index: 100;
     }
     .loadding-icon {
       position: absolute;
@@ -51,8 +61,7 @@
       background-repeat: no-repeat;
       background-size: cover;
       position: relative;
-      opacity: 0.3;
-      z-index: -1;
+      opacity: 1;
     }
     .hero-text {
       text-align: center;
@@ -97,7 +106,7 @@
 </head>
 
 <body>
-<div class="hero-image">
+<div id="content" class="hero-image">
   <div class="hero-text">
     <h1 style="font-size:50px">Future Frame Prediction for Anomaly Detection</h1>
     <form method ='post' enctype=multipart/form-data class='form'>
@@ -126,12 +135,12 @@
           </div>
         </div>
 
-		<input type="submit" value="Run">
+		<input type="submit" value="Run" onclick="myFunction();">
     </form>
   </div>
 </div>
 
-<div class="loading-screen">
+<div id="loading" class="loading-screen">
   <div class="loadding-text">...Processing...</div>
   <img class="loadding-icon" src="static/asset/waiting_run.gif">
   <div class="author">
@@ -141,5 +150,13 @@
     </ul>
   </div>
 </div>
+
+<script>
+        function myFunction()
+        {
+            document.getElementById("loading").style.display = "block";
+            document.getElementById("content").style.diplay = "none";
+        }
+</script>
 </body>
 </html>
