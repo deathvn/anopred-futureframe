@@ -31,8 +31,14 @@ evaluate_name = const.EVALUATE
 print("This is const = ", const)
 
 def image2_bin(img):
-    new_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    #new_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    new_image = img
     new_image[new_image<30] = 0
+
+    avg_val = np.mean(new_image[new_image!=0])
+    
+    new_image[new_image < avg_val] = 0
+    '''    
     Sum = 0
     count = 0
     for im_col in new_image:
@@ -44,16 +50,41 @@ def image2_bin(img):
         return new_image
     avg_val = Sum//count
     new_image[new_image<avg_val]=0
+    '''
     return new_image
 
 def apply_mask(img, mask):
-    h, w = mask.shape[:2]
+    h, w = img.shape[:2]
+
+    #img = img.flatten()
+    #mask = mask.flatten()
+    
+    
+    yellow = np.zeros((h, w, 3), dtype='uint8')
+    yellow[..., 0] = 0
+    yellow[..., 1] = 255
+    yellow[..., 2] = 255
+
+    mask = cv2.cvtColor(mask,cv2.COLOR_GRAY2RGB)
+
+    
+    mask = mask/255    
+
+    img = (1-mask) * img + mask * yellow
+    #img = mask
+
+    '''
     for i in range(h):
         for j in range(w):
             if (mask[i][j] != 0):
                 alpha = np.float32 ( mask[i][j]/255 )
                 new_color = [(1-alpha) * img[i][j][0] + alpha * 0, (1-alpha) * img[i][j][1] + alpha * 255, (1-alpha) * img[i][j][2] + alpha * 255]
                 img[i][j] = np.uint8 ( new_color )
+    '''
+    
+    #img = (1-mask)*img + mask*np.uint8(0, 255, 255)
+    
+    #img = img.reshape(h, w, 3)
     return img
 
 # define dataset
@@ -72,9 +103,12 @@ with tf.variable_scope('generator', reuse=None):
     test_outputs = generator(test_inputs, layers=4, output_channel=3)
     print ("test_outputs: ",test_outputs)
     test_psnr_error = psnr_error(gen_frames=test_outputs, gt_frames=test_gt)
-    truth = test_gt
-    loss_val = tf.abs((test_outputs - test_gt)*255)
-    psnr_and_mask = test_psnr_error, loss_val
+    truth = test_gt*255
+    loss_val = tf.reduce_mean(tf.abs((test_outputs - test_gt)*255), axis=3, keep_dims=True)
+    #loss_val[loss_val<30] = 0
+    #mean = tf.reduce_mean(loss_val)
+    #loss_val[loss_val<mean] = 0
+    psnr_and_mask = test_psnr_error, loss_val, truth
 
 
 config = tf.ConfigProto()
@@ -203,8 +237,9 @@ with tf.Session(config=config) as sess:
         total = 0
         timestamp = time.time()
 
-        mask_path = 'mask/'
+        #mask_path = 'mask/'
         mask_list = []
+        truth_list = []
         
         it = 0
         for video_name, video in videos_info.items():
@@ -214,14 +249,18 @@ with tf.Session(config=config) as sess:
 
             for i in range(num_his, length):
                 video_clip = data_loader.get_video_clips(video_name, i - num_his, i + 1)
-                psnr, mask = sess.run(psnr_and_mask,
+                psnr, mask, truth = sess.run(psnr_and_mask,
                                 feed_dict={test_video_clips_tensor: video_clip[np.newaxis, ...]})
                 psnrs[i] = psnr
                 
-                mask = np.uint8(mask)                
-                mask = mask.reshape(256, 256, 3)
+                mask = np.uint8(mask)               
+                mask = image2_bin(mask)
+                mask = mask.reshape(256, 256, 1)
                 mask_list.append(mask)
                 #np.save(mask_path + '{:06}'.format(it) + ".npy", mask)
+                truth = np.uint8(truth)
+                truth = truth.reshape(256, 256, 3)
+                truth_list.append(truth)
 
                 print('video = {} / {}, i = {} / {}, psnr = {:.6f}'.format(video_name, num_videos, i, length, psnr))
                     
@@ -230,7 +269,9 @@ with tf.Session(config=config) as sess:
             psnrs[0:num_his] = psnrs[num_his]
             psnr_records.append(psnrs)
 
-        used_time = time.time() - timestamp
+        end_time1 = time.time()
+        used_time = end_time1 - timestamp
+        print ("stamp1:", timestamp, "- end_time1", end_time1)
         print('total time = {}, fps = {}'.format(used_time, total / used_time))
         result_dict = {'dataset': dataset_name, 'psnr': psnr_records, 'flow': [], 'names': [], 'diff_mask': []}
         # TODO specify what's the actual name of ckpt.
@@ -250,7 +291,13 @@ with tf.Session(config=config) as sess:
         #thres = 0.6
         #mask_list = os.listdir(mask_path)
         #mask_list.sort()
-        
+
+        frames_list = os.listdir(inp_path + '/01')
+        frames_list.sort()
+        sample_img = cv2.imread(inp_path + '/' + '01' + '/' + frames_list[0])
+        H, W = sample_img.shape[:2]
+
+        timestamp2 = time.time()
         for video_name, video in videos_info.items():
             
             length = video['length']
@@ -259,8 +306,9 @@ with tf.Session(config=config) as sess:
             #save_npy_file = 'npy/' + new_video_name + '.npy'
             dat = np.zeros(length)
             
-            frames_list = os.listdir(inp_path + '/' + new_video_name)
-            frames_list.sort()
+
+            #frames_list = os.listdir(inp_path + '/' + new_video_name)
+            #frames_list.sort()
             for i in range(num_his, length):
                 if scores[it] >= thres:
                     k=0
@@ -275,14 +323,16 @@ with tf.Session(config=config) as sess:
                 img_path = inp_path + '/' + new_video_name + '/' + frames_list[i]
                 #print ("img path:", img_path)
                 frame_out = out_path + '{:06}'.format(it) + ".jpg"
-                #print ("frames out:", frame_out)
+                print ("frames out:", frame_out)
                 frame = cv2.imread(img_path)
                 H, W = frame.shape[:2]
+                #frame = truth_list[it]
+                #frame = cv2.resize(frame, (W, H))
                 
                 #l_val = np.load(mask_path + mask_list[it])               
                 l_val = mask_list[it]
                 l_val = cv2.resize(l_val, (W,H))
-                l_val = image2_bin(l_val)
+                #l_val = image2_bin(l_val)
                 
                 if k==1:
                     cv2.rectangle(frame, (0,0), (W, H), (0, 0, 255), thickness=5, lineType=8, shift=0)
@@ -303,8 +353,10 @@ with tf.Session(config=config) as sess:
             plt.title('Video '+ new_video_name +' Score')
             fig.savefig('static/plot/'+ new_video_name + '.png')
             #np.save(save_npy_file, dat)
-        used_time = time.time() - timestamp
-        print('total time = {}, fps = {}'.format(used_time, total / used_time))
+        end_time2 = time.time()
+        used_time2 = end_time2 - timestamp2
+        print ("stamp2:", timestamp2, "- end_time2:", end_time2)
+        print('total time = {}, fps = {}'.format(used_time2, total / used_time2))
     if dataset_name=='upload':
         inference_func(snapshot_dir, dataset_name, evaluate_name)
     else:
