@@ -1,6 +1,6 @@
 # Future Frame Prediction for Anomaly Detection -- Phát hiện bất thường trong video bằng Dự đoán khung hình
 This repo is the source of our thesis, implemented in python tensorflow. [Demo Videos list](https://www.youtube.com/playlist?list=PLaHlllAfhKRsJYn3j9s60Oi1mA8FbxhQS)  
-Check our [colap work](https://colab.research.google.com/drive/1wkpxYdcxFSrX0T45haedTnis0ROed9bb)  
+Check our [colap work](https://colab.research.google.com/drive/1FhKSz35T9p-rTohMSrYDZ-4xWUwl45lN)  
 - VŨ LÊ HOÀNG MINH  15520498  
 - TRẦN KHẢ PHIÊU  15520614  
 ![abnormal detection](assets/cover.JPG)
@@ -103,6 +103,7 @@ python inference.py  --dataset  ped2    \
                      --gpu  1
 ```
 Run **python train.py -h** to know more about the flag options or see the detials in **constant.py**.
+
 ```shell
 Options to run the network.
 
@@ -143,7 +144,7 @@ After install flask framework, cd to **Codes** folder, and run the web applicati
 cd Codes
 python app.py
 ```
-Feel confuse with environments, or don't want to install anything, check our [colab work here](https://colab.research.google.com/drive/1wkpxYdcxFSrX0T45haedTnis0ROed9bb)!
+Feel confuse with environments, or don't want to install anything, check our [colab work here](https://colab.research.google.com/drive/1FhKSz35T9p-rTohMSrYDZ-4xWUwl45lN)!
 ## Reference
 This project is referenced from [Future Frame Prediction for Anomaly Detection -- A New Baseline, CVPR 2018](https://arxiv.org/pdf/1712.09867.pdf) - by Wen Liu, Weixin Lluo, Dongze Lian and Shenghua Gao.  
 Thanks for [their nice work](https://github.com/StevenLiuWen/ano_pred_cvpr2018.git)!
